@@ -1,4 +1,4 @@
-import type { ErrorBoundaryProps, ErrorBoundaryState } from '../types/types';
+import type { ErrorBoundaryProps, ErrorBoundaryState } from '../../types/types';
 import React, { Component } from 'react';
 
 class ErrorBoundary extends Component<

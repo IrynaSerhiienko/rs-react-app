@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import type { AppState } from './types/types';
-import ErrorBoundary from './components/ErrorBoundary';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import Search from './components/Search/Search';
