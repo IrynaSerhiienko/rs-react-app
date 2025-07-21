@@ -2,25 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 import CardList from './CardList';
+import { charactersMock } from '../../tests/mocks';
 
 describe('CardList component', () => {
   it('renders a list of Card components with correct props', () => {
-    const items = [
-      {
-        id: 1,
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        image: 'rick.jpg',
-      },
-      {
-        id: 2,
-        name: 'Morty Smith',
-        status: 'Alive',
-        image: 'morty.jpg',
-      },
-    ];
-
-    render(<CardList items={items} />);
+    render(<CardList items={charactersMock} />);
 
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();

@@ -1,6 +1,6 @@
-import CardList from './CardList/CardList';
+import CardList from '../CardList/CardList';
 import { Component } from 'react';
-import type { MainProps } from '../types/types';
+import type { MainProps } from '../../types/types';
 // import Search from './Search';
 
 class Main extends Component<MainProps> {

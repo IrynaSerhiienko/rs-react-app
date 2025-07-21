@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import type { AppState } from './types/types';
 import ErrorBoundary from './components/ErrorBoundary';
 import Header from './components/Header/Header';
-import Main from './components/Main';
-import Search from './components/Search';
+import Main from './components/Main/Main';
+import Search from './components/Search/Search';
 import { fetchCharacters } from './api/api';
 
 class App extends Component<Record<string, never>, AppState> {
