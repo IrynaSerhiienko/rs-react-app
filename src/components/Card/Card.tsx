@@ -1,4 +1,4 @@
-import type { CardProps } from '../types/types';
+import type { CardProps } from '../../types/types';
 import { Component } from 'react';
 
 class Card extends Component<CardProps> {

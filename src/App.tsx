@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 import type { AppState } from './types/types';
-import ErrorBoundary from './components/ErrorBoundary';
-import Header from './components/Header';
-import Main from './components/Main';
-import Search from './components/Search';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import Search from './components/Search/Search';
 import { fetchCharacters } from './api/api';
 
 class App extends Component<Record<string, never>, AppState> {
@@ -36,10 +36,8 @@ class App extends Component<Record<string, never>, AppState> {
 
   render(): React.ReactNode {
     const { loading, error, data } = this.state;
-    // const { loading, error, data, searchTerm } = this.state;
 
     return (
-      // <ErrorBoundary searchTerm={searchTerm} onSearch={this.handleSearch}>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <div className="w-full max-w-3xl flex flex-col items-center">
           <Header />
@@ -49,7 +47,6 @@ class App extends Component<Record<string, never>, AppState> {
           </ErrorBoundary>
         </div>
       </div>
-      // </ErrorBoundary>
     );
   }
 }

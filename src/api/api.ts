@@ -12,7 +12,6 @@ export async function fetchCharacters(
   }
 
   const data = await res.json();
-  console.log(data);
 
   return data;
 }

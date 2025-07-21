@@ -1,5 +1,5 @@
-import Card from './Card';
-import type { CardListProps } from '../types/types';
+import Card from '../Card/Card';
+import type { CardListProps } from '../../types/types';
 import { Component } from 'react';
 
 class CardList extends Component<CardListProps> {
