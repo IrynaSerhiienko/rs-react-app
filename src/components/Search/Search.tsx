@@ -18,6 +18,7 @@ export function Search() {
     const trimmed = inputValue.trim();
     localStorage.setItem('searchTerm', trimmed);
     setSearchTerm(trimmed);
+    // setInputValue('');
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

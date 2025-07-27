@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { Pagination } from '@/components/pagination/pagination';
 
 import { fetchCharacters } from '../../api/api';
 import { CardList } from '../../components/card-list/card-list';
@@ -12,57 +15,62 @@ export function HomePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<Character[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const handleSearch = useCallback(
-    async (term: string) => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetchCharacters(term);
-        localStorage.setItem('searchTerm', term);
-        setData(res.results);
-        setSearchTerm(term);
-      } catch (err) {
-        const message =
-          err instanceof Error ? err.message : 'Something went wrong';
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [setSearchTerm]
-  );
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = searchParams.get('page');
+  const page = pageParam ? parseInt(pageParam, 10) : 1;
+
+  const prevSearchTerm = useRef<string>(searchTerm);
 
   useEffect(() => {
-    const init = async () => {
-      const savedTerm = localStorage.getItem('searchTerm');
-
-      if (savedTerm && !searchTerm) {
-        setSearchTerm(savedTerm);
-      } else if (!savedTerm && !searchTerm) {
-        try {
-          setLoading(true);
-          setError(null);
-          const res = await fetchCharacters();
-          setData(res.results);
-        } catch (err) {
-          const message =
-            err instanceof Error ? err.message : 'Something went wrong';
-          setError(message);
-        } finally {
-          setLoading(false);
+    if (searchTerm !== prevSearchTerm.current) {
+      prevSearchTerm.current = searchTerm;
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        if (params.get('page') !== '1') {
+          params.set('page', '1');
+          return params;
         }
-      }
-    };
+        return prev;
+      });
+    }
+  }, [searchTerm, setSearchParams]);
 
-    init();
+  const handleSearch = useCallback(async (term: string, currentPage = 1) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetchCharacters({ name: term, page: currentPage });
+      localStorage.setItem('searchTerm', term);
+      setData(res.results);
+      setTotalPages(res.info.pages);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Something went wrong';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    handleSearch(searchTerm || '', page);
+  }, [searchTerm, page, handleSearch]);
+
+  useEffect(() => {
+    const savedTerm = localStorage.getItem('searchTerm') || '';
+    if (!searchTerm && savedTerm) {
+      setSearchTerm(savedTerm);
+    }
   }, [searchTerm, setSearchTerm]);
 
-  useEffect(() => {
-    if (searchTerm) {
-      handleSearch(searchTerm);
-    }
-  }, [searchTerm, handleSearch]);
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', newPage.toString());
+    setSearchParams(params);
+  };
 
   return (
     <>
@@ -75,8 +83,20 @@ export function HomePage() {
 
       <Search />
 
+      {!error && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
+
       <div>
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <p className="text-lg font-semibold p-3 animate-pulse text-center">
+            Loading...
+          </p>
+        )}
         {error && <p className="text-red-500">{error}</p>}
         {!loading && !error && <CardList items={data} />}
       </div>
