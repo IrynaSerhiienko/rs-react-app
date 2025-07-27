@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
-import Card from './Card';
+import { Card } from './card';
 
 describe('Card component', () => {
   it('renders passed name, status and image correctly', () => {

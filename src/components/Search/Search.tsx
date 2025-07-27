@@ -1,48 +1,51 @@
-import React, { Component } from 'react';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import { useEffect, useState } from 'react';
 
-interface Props {
-  onSearch: (term: string) => void;
-}
+import { useSearch } from '../../context/search-context';
 
-interface State {
-  searchTerm: string;
-}
+export function Search() {
+  const { searchTerm, setSearchTerm } = useSearch();
 
-class Search extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const storedTerm = localStorage.getItem('searchTerm') || '';
-    this.state = { searchTerm: storedTerm };
-  }
+  const [inputValue, setInputValue] = useState(() => {
+    return localStorage.getItem('searchTerm') || '';
+  });
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: e.target.value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
-  handleSearch = () => {
-    const trimmed = this.state.searchTerm.trim();
+  const doSearch = () => {
+    const trimmed = inputValue.trim();
     localStorage.setItem('searchTerm', trimmed);
-    this.props.onSearch(trimmed);
+    setSearchTerm(trimmed);
   };
 
-  render(): React.ReactNode {
-    return (
-      <div className="flex space-x-2 mb-4">
-        <input
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
-          placeholder="Search..."
-          className="p-2 border rounded w-full"
-        />
-        <button
-          onClick={this.handleSearch}
-          className="bg-blue-100 p-2 rounded cursor-pointer border-2"
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      doSearch();
+    }
+  };
 
-export default Search;
+  useEffect(() => {
+    setInputValue(searchTerm);
+  }, [searchTerm]);
+
+  return (
+    <div className="flex space-x-2 mb-4">
+      <input
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Search..."
+        className="p-2 border rounded w-full"
+      />
+      <button
+        onClick={doSearch}
+        className="bg-blue-100 p-2 rounded cursor-pointer border-2"
+        type="button"
+      >
+        Search
+      </button>
+    </div>
+  );
+}

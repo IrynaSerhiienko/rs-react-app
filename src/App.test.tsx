@@ -1,10 +1,9 @@
-import * as api from './api/api';
-
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-
-import App from './App';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import * as api from './api/api';
+import App from './app';
 
 describe('App component', () => {
   const fetchCharactersMock = vi.spyOn(api, 'fetchCharacters');
