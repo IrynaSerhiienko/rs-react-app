@@ -1,4 +1,4 @@
-import { Title } from '@/components/title/title';
+import { Title } from '../../components/title/title';
 
 export function AboutPage() {
   const info = {
