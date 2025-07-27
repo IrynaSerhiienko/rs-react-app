@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { Title } from '@/components/title/title';
+import { Title } from '../../components/title/title';
 
 export function Error404Page() {
   const navigate = useNavigate();
