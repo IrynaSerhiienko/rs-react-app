@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
-import CardList from './CardList';
 import { charactersMock } from '../../tests/mocks';
+import { CardList } from './card-list';
 
 describe('CardList component', () => {
   it('renders a list of Card components with correct props', () => {

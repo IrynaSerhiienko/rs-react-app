@@ -1,5 +1,6 @@
-import type { ErrorBoundaryProps, ErrorBoundaryState } from '../../types/types';
 import React, { Component } from 'react';
+
+import type { ErrorBoundaryProps, ErrorBoundaryState } from '../../types/types';
 
 class ErrorBoundary extends Component<
   React.PropsWithChildren<ErrorBoundaryProps>,
@@ -23,8 +24,12 @@ class ErrorBoundary extends Component<
     this.setState({ throwError: true });
   };
 
+  handleRetry = () => {
+    this.setState({ hasError: false, throwError: false });
+  };
+
   render() {
-    const { hasError } = this.state;
+    const { hasError, throwError } = this.state;
 
     const errorButton = (
       <button
@@ -35,13 +40,24 @@ class ErrorBoundary extends Component<
       </button>
     );
 
+    const retryButton = (
+      <button
+        onClick={this.handleRetry}
+        className="mt-4 p-2 bg-blue-500 text-white rounded self-start w-auto cursor-pointer"
+      >
+        Try again
+      </button>
+    );
+
     if (hasError) {
       return (
         <div className="p-4 min-h-screen flex flex-col justify-between">
           <div className="my-4 p-4 text-red-600 font-bold text-xl text-center">
             Non-successful response.
           </div>
-          {errorButton}
+          <div className="flex gap-4">
+            {errorButton} {retryButton}
+          </div>
         </div>
       );
     }
@@ -50,7 +66,7 @@ class ErrorBoundary extends Component<
       <div className="flex flex-col min-h-screen">
         <div className="flex-grow">{this.props.children}</div>
         {errorButton}
-        <ErrorThrower shouldThrow={this.state.throwError} />
+        <ErrorThrower shouldThrow={throwError} />
       </div>
     );
   }
@@ -63,6 +79,6 @@ class ErrorThrower extends Component<{ shouldThrow: boolean }> {
     if (this.props.shouldThrow) {
       throw new Error('Test error!');
     }
-    return null; // or <></>
+    return null;
   }
 }

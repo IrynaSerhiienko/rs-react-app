@@ -1,48 +1,51 @@
-import React, { Component } from 'react';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import { useEffect, useState } from 'react';
 
-interface Props {
-  onSearch: (term: string) => void;
-}
-
-interface State {
+type SearchProps = {
   searchTerm: string;
-}
+  setSearchTerm: (term: string) => void;
+  onSearch: (term: string) => void;
+};
 
-class Search extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const storedTerm = localStorage.getItem('searchTerm') || '';
-    this.state = { searchTerm: storedTerm };
-  }
+export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
+  const [inputValue, setInputValue] = useState(searchTerm);
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: e.target.value });
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
-  handleSearch = () => {
-    const trimmed = this.state.searchTerm.trim();
-    localStorage.setItem('searchTerm', trimmed);
-    this.props.onSearch(trimmed);
+  const handleSearch = () => {
+    const trimmed = inputValue.trim();
+    setSearchTerm(trimmed);
+    onSearch(trimmed);
   };
 
-  render(): React.ReactNode {
-    return (
-      <div className="flex space-x-2 mb-4">
-        <input
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
-          placeholder="Search..."
-          className="p-2 border rounded w-full"
-        />
-        <button
-          onClick={this.handleSearch}
-          className="bg-blue-100 p-2 rounded cursor-pointer border-2"
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
-export default Search;
+  useEffect(() => {
+    setInputValue(searchTerm);
+  }, [searchTerm]);
+
+  return (
+    <div className="flex space-x-2 mb-4">
+      <input
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Search..."
+        className="p-2 border rounded w-full"
+      />
+      <button
+        onClick={handleSearch}
+        className="	px-4 py-2 bg-gray-300 rounded cursor-pointer hover:bg-gray-400 hover:text-white transition-all duration-300"
+        type="button"
+      >
+        Search
+      </button>
+    </div>
+  );
+}

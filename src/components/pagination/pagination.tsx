@@ -1,0 +1,53 @@
+type PaginationProps = {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+};
+
+export function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) {
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
+  };
+
+  return (
+    <nav className="flex justify-center gap-4 my-6">
+      <button
+        disabled={currentPage === 1}
+        onClick={handlePrev}
+        className={`px-4 py-2 bg-gray-300 rounded ${
+          currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+        }`}
+      >
+        Prev
+      </button>
+
+      <span className="px-4 py-2">
+        Page {currentPage} of {totalPages}
+      </span>
+
+      <button
+        disabled={currentPage === totalPages}
+        onClick={handleNext}
+        className={`px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 hover:text-white transition-all duration-300 ${
+          currentPage === totalPages
+            ? 'cursor-not-allowed opacity-50'
+            : 'cursor-pointer'
+        }`}
+      >
+        Next
+      </button>
+    </nav>
+  );
+}
