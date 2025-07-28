@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Pagination } from '@/components/pagination/pagination';
 
@@ -22,6 +22,12 @@ export function HomePage() {
   const page = pageParam ? parseInt(pageParam, 10) : 1;
 
   const prevSearchTerm = useRef<string>(searchTerm);
+
+  const navigate = useNavigate();
+
+  const onCardClick = (id: number) => {
+    navigate(`details/${id}`);
+  };
 
   useEffect(() => {
     if (searchTerm !== prevSearchTerm.current) {
@@ -91,14 +97,24 @@ export function HomePage() {
         />
       )}
 
-      <div>
-        {loading && (
-          <p className="text-lg font-semibold p-3 animate-pulse text-center">
-            Loading...
-          </p>
-        )}
-        {error && <p className="text-red-500">{error}</p>}
-        {!loading && !error && <CardList items={data} />}
+      <div className="flex gap-6">
+        <div className="flex-1">
+          <div>
+            {loading && (
+              <p className="text-lg font-semibold p-3 animate-pulse text-center">
+                Loading...
+              </p>
+            )}
+            {error && <p className="text-red-500">{error}</p>}
+            {!loading && !error && (
+              <CardList items={data} onCardClick={onCardClick} />
+            )}
+          </div>
+        </div>
+
+        <div className="w-1/3 pl-6">
+          <Outlet />
+        </div>
       </div>
     </>
   );

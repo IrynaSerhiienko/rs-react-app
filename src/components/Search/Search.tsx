@@ -42,7 +42,7 @@ export function Search() {
       />
       <button
         onClick={doSearch}
-        className="bg-blue-100 p-2 rounded cursor-pointer border-2"
+        className="	px-4 py-2 bg-gray-300 rounded cursor-pointer hover:bg-gray-400 hover:text-white transition-all duration-300"
         type="button"
       >
         Search

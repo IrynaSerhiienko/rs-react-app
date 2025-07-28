@@ -3,6 +3,8 @@ export interface Character {
   name: string;
   status: string;
   image: string;
+  species?: string;
+  gender?: string;
 }
 
 export interface ErrorBoundaryProps {

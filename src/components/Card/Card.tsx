@@ -1,12 +1,21 @@
 import type { Character } from '../../types/types';
 
-type CardProps = Pick<Character, 'name' | 'status' | 'image'>;
+interface CardProps
+  extends Pick<Character, 'id' | 'name' | 'status' | 'image'> {
+  onClick?: (id: number) => void;
+}
 
-export function Card(props: CardProps) {
-  const { name, status, image } = props;
-
+export function Card({ id, name, status, image, onClick }: CardProps) {
   return (
-    <div className="border p-4 rounded shadow bg-white flex items-center space-x-4">
+    <div
+      className="border p-4 rounded shadow bg-white flex items-center space-x-4 cursor-pointer"
+      onClick={() => onClick?.(id)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') onClick?.(id);
+      }}
+    >
       <img
         src={image}
         alt={name}
