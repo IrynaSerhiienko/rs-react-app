@@ -1,10 +1,10 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import { HomePage } from './home-page';
 import { fetchCharacters } from '../../api/api';
 import { useSearch } from '../../context/search-context';
+import { HomePage } from './home-page';
 
 vi.mock('../../api/api', () => ({
   fetchCharacters: vi.fn(),

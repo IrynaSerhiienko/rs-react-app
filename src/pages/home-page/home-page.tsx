@@ -7,37 +7,33 @@ import { CharacterDetails } from '../../components/character-details/character-d
 import { Pagination } from '../../components/pagination/pagination';
 import { Search } from '../../components/search/search';
 import { Title } from '../../components/title/title';
-import { useSearch } from '../../context/search-context';
+import { usePageWithLocalStorage } from '../../hooks/use-page-with-local-storage';
+import { useSearchTermWithLocalStorage } from '../../hooks/use-search-term-with-local-storage';
 import type { Character } from '../../types/types';
 
 export function HomePage() {
-  const { searchTerm, setSearchTerm } = useSearch();
+  const { searchTerm, setSearchTerm } = useSearchTermWithLocalStorage();
+  const { page, setPage } = usePageWithLocalStorage();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<Character[]>([]);
   const [totalPages, setTotalPages] = useState(1);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageParam = searchParams.get('page');
-  const storedPage = Number(localStorage.getItem('page')) || 1;
-  const page = pageParam ? parseInt(pageParam, 10) : storedPage;
-
-  const prevSearchTerm = useRef<string>(searchTerm);
-
+  const prevSearchTerm = useRef(searchTerm);
   const navigate = useNavigate();
 
   const onCardClick = (id: number) => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     params.set('details', id.toString());
-    localStorage.setItem('page', page.toString());
     navigate({ search: params.toString() });
   };
 
   const closeDetails = () => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
-    localStorage.setItem('page', page.toString());
     setSearchParams(params);
   };
 
@@ -48,13 +44,13 @@ export function HomePage() {
         const params = new URLSearchParams(prev);
         if (params.get('page') !== '1') {
           params.set('page', '1');
-          localStorage.setItem('page', '1');
+          setPage(1);
           return params;
         }
         return prev;
       });
     }
-  }, [searchTerm, setSearchParams]);
+  }, [searchTerm, setSearchParams, setPage]);
 
   const handleSearch = useCallback(async (term: string, currentPage = 1) => {
     try {
@@ -62,8 +58,6 @@ export function HomePage() {
       setError(null);
 
       const res = await fetchCharacters({ name: term, page: currentPage });
-      localStorage.setItem('searchTerm', term);
-      localStorage.setItem('page', currentPage.toString());
       setData(res.results);
       setTotalPages(res.info.pages);
     } catch (err) {
@@ -79,22 +73,15 @@ export function HomePage() {
     handleSearch(searchTerm || '', page);
   }, [searchTerm, page, handleSearch]);
 
-  useEffect(() => {
-    const savedTerm = localStorage.getItem('searchTerm') || '';
-    if (!searchTerm && savedTerm) {
-      setSearchTerm(savedTerm);
-    }
-  }, [searchTerm, setSearchTerm]);
-
   const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+
     const params = new URLSearchParams();
     params.set('page', newPage.toString());
     const details = searchParams.get('details');
     if (details) {
       params.set('details', details);
     }
-
-    localStorage.setItem('page', newPage.toString());
 
     setSearchParams(params);
   };
@@ -110,7 +97,15 @@ export function HomePage() {
         Rick and Morty Search
       </Title>
 
-      <Search />
+      <Search
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        onSearch={(term: string) => {
+          setSearchTerm(term);
+          setPage(1);
+          handleSearch(term, 1);
+        }}
+      />
 
       {!error && (
         <Pagination

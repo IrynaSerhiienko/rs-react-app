@@ -1,29 +1,28 @@
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import { useEffect, useState } from 'react';
 
-import { useSearch } from '../../context/search-context';
+type SearchProps = {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  onSearch: (term: string) => void;
+};
 
-export function Search() {
-  const { searchTerm, setSearchTerm } = useSearch();
+export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
+  const [inputValue, setInputValue] = useState(searchTerm);
 
-  const [inputValue, setInputValue] = useState(() => {
-    return localStorage.getItem('searchTerm') || '';
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
-  const doSearch = () => {
+  const handleSearch = () => {
     const trimmed = inputValue.trim();
-    localStorage.setItem('searchTerm', trimmed);
     setSearchTerm(trimmed);
-    // setInputValue('');
+    onSearch(trimmed);
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      doSearch();
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -41,7 +40,7 @@ export function Search() {
         className="p-2 border rounded w-full"
       />
       <button
-        onClick={doSearch}
+        onClick={handleSearch}
         className="	px-4 py-2 bg-gray-300 rounded cursor-pointer hover:bg-gray-400 hover:text-white transition-all duration-300"
         type="button"
       >
