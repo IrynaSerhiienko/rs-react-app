@@ -15,7 +15,10 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
 
     async function loadCharacter() {
       setLoading(true);
@@ -35,7 +38,7 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
 
   if (loading) return <p>Loading details...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
-  if (!character) return <p>No character found</p>;
+  if (!character || !character.name) return <p>No character found</p>;
 
   return (
     <div>

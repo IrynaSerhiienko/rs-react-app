@@ -6,7 +6,6 @@ import { LimitContainer } from '../container/container';
 const navItems = [
   { to: '/', label: 'Home', end: true },
   { to: '/about', label: 'About' },
-  // { to: '/non-existent', label: 'Error404 (test)' },
 ];
 
 export function Header() {
