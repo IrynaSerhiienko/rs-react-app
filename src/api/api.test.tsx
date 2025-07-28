@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { fetchCharacterById } from './api';
 import { fetchCharacters } from './api';
 
 describe('fetchCharacters', () => {
@@ -87,5 +88,53 @@ describe('fetchCharacters', () => {
     await expect(
       fetchCharacters({ name: searchTerm1, page: 1 })
     ).rejects.toThrow(`API error: ${errorStatus}`);
+  });
+});
+
+describe('fetchCharacterById', () => {
+  const mockCharacter = {
+    id: 1,
+    name: 'Rick Sanchez',
+    status: 'Alive',
+    image: 'rick.jpg',
+    species: 'Human',
+    gender: 'Male',
+    origin: { name: 'Earth', url: '' },
+    location: { name: 'Earth', url: '' },
+    episode: [],
+    url: '',
+    created: '',
+  };
+
+  beforeEach(() => {
+    globalThis.fetch = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('fetches character by ID successfully', async () => {
+    (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+      ok: true,
+      json: async () => mockCharacter,
+    });
+
+    const result = await fetchCharacterById(1);
+
+    expect(fetch).toHaveBeenCalledWith(
+      'https://rickandmortyapi.com/api/character/1'
+    );
+    expect(result).toEqual(mockCharacter);
+  });
+
+  it('throws an error if fetch fails (not ok)', async () => {
+    (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+      ok: false,
+    });
+
+    await expect(fetchCharacterById(999)).rejects.toThrow(
+      'Failed to fetch character details'
+    );
   });
 });

@@ -1,19 +1,35 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { type FC } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { fetchCharacters } from '../../api/api';
-import { useSearch } from '../../context/search-context';
 import { HomePage } from './home-page';
+
+let pageValue = 1;
+const setPageMock = vi.fn((newPage) => {
+  pageValue = newPage;
+});
+const setSearchTermMock = vi.fn();
+
+vi.mock('../../hooks/use-search-term-with-local-storage', () => ({
+  useSearchTermWithLocalStorage: () => ({
+    searchTerm: '',
+    setSearchTerm: setSearchTermMock,
+  }),
+}));
+
+vi.mock('../../hooks/use-page-with-local-storage', () => ({
+  usePageWithLocalStorage: () => ({
+    get page() {
+      return pageValue;
+    },
+    setPage: setPageMock,
+  }),
+}));
 
 vi.mock('../../api/api', () => ({
   fetchCharacters: vi.fn(),
-}));
-
-const setSearchTermMock = vi.fn();
-
-vi.mock('../../context/search-context', () => ({
-  useSearch: vi.fn(),
 }));
 
 vi.mock('../../components/search/search', () => ({
@@ -27,7 +43,7 @@ interface PaginationProps {
 }
 
 vi.mock('../../components/pagination/pagination', () => ({
-  Pagination: ({ currentPage, totalPages, onPageChange }: PaginationProps) => (
+  Pagination: (({ currentPage, totalPages, onPageChange }: PaginationProps) => (
     <div data-testid="pagination-mock">
       <button onClick={() => onPageChange(currentPage - 1)}>Prev</button>
       <span>
@@ -35,7 +51,7 @@ vi.mock('../../components/pagination/pagination', () => ({
       </span>
       <button onClick={() => onPageChange(currentPage + 1)}>Next</button>
     </div>
-  ),
+  )) as FC<PaginationProps>,
 }));
 
 interface Card {
@@ -51,7 +67,7 @@ interface CardListProps {
 }
 
 vi.mock('../../components/card-list/card-list', () => ({
-  CardList: ({ items, onCardClick }: CardListProps) => (
+  CardList: (({ items, onCardClick }: CardListProps) => (
     <ul data-testid="card-list">
       {items.map((item) => (
         <li key={item.id} onClick={() => onCardClick(item.id)}>
@@ -59,7 +75,7 @@ vi.mock('../../components/card-list/card-list', () => ({
         </li>
       ))}
     </ul>
-  ),
+  )) as FC<CardListProps>,
 }));
 
 interface CharacterDetailsProps {
@@ -68,17 +84,18 @@ interface CharacterDetailsProps {
 }
 
 vi.mock('../../components/character-details/character-details', () => ({
-  CharacterDetails: ({ id, onClose }: CharacterDetailsProps) => (
+  CharacterDetails: (({ id, onClose }: CharacterDetailsProps) => (
     <div data-testid="character-details">
       Details for {id}
       <button onClick={onClose}>Close</button>
     </div>
-  ),
+  )) as FC<CharacterDetailsProps>,
 }));
 
 describe('HomePage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    pageValue = 1;
 
     (fetchCharacters as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
       results: [
@@ -86,11 +103,6 @@ describe('HomePage', () => {
         { id: 2, name: 'Morty', status: 'Alive', image: 'img2' },
       ],
       info: { pages: 3 },
-    });
-
-    (useSearch as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      searchTerm: '',
-      setSearchTerm: setSearchTermMock,
     });
   });
 
@@ -131,6 +143,8 @@ describe('HomePage', () => {
 
     const nextButton = screen.getByText('Next');
     fireEvent.click(nextButton);
+
+    await waitFor(() => expect(setPageMock).toHaveBeenCalledWith(2));
 
     await waitFor(() => {
       expect(fetchCharacters).toHaveBeenCalledWith({ name: '', page: 2 });
