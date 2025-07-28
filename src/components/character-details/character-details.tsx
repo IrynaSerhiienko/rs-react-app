@@ -1,34 +1,37 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import { fetchCharacterById } from '../../api/api';
 import type { Character } from '../../types/types';
 import { Title } from '../title/title';
 
-export function CharacterDetails() {
-  const { id } = useParams<{ id: string }>();
+type CharacterDetailsProps = {
+  id: string;
+  onClose: () => void;
+};
+
+export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (!id) return;
 
-    setLoading(true);
-    fetchCharacterById(parseInt(id, 10))
-      .then((data) => {
+    async function loadCharacter() {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchCharacterById(parseInt(id, 10));
         setCharacter(data);
-        setError(null);
-      })
-      .catch(() => setError('Failed to load character details'))
-      .finally(() => setLoading(false));
-  }, [id]);
+      } catch {
+        setError('Failed to load character details');
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const closeDetails = () => {
-    navigate('/');
-  };
+    loadCharacter();
+  }, [id]);
 
   if (loading) return <p>Loading details...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -56,7 +59,7 @@ export function CharacterDetails() {
         </p>
       </div>
       <button
-        onClick={closeDetails}
+        onClick={onClose}
         className="px-4 py-2 bg-gray-300 rounded cursor-pointer hover:bg-gray-400 hover:text-white transition-all duration-300"
       >
         Close
