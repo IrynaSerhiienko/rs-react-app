@@ -33,4 +33,21 @@ describe('ErrorBoundary component', () => {
 
     expect(screen.queryByText('Child content')).toBeNull();
   });
+
+  it('resets error state and shows children again on clicking Try again button', () => {
+    render(
+      <ErrorBoundary>
+        <div>Child content</div>
+      </ErrorBoundary>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /error button/i }));
+
+    expect(screen.getByText(/non-successful response/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+
+    expect(screen.getByText('Child content')).toBeInTheDocument();
+    expect(screen.queryByText(/non-successful response/i)).toBeNull();
+  });
 });

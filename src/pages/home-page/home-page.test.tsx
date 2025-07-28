@@ -7,14 +7,18 @@ import { fetchCharacters } from '../../api/api';
 import { HomePage } from './home-page';
 
 let pageValue = 1;
+let currentSearchTerm = '';
+
 const setPageMock = vi.fn((newPage) => {
   pageValue = newPage;
 });
-const setSearchTermMock = vi.fn();
+const setSearchTermMock = vi.fn((newTerm: string) => {
+  currentSearchTerm = newTerm;
+});
 
 vi.mock('../../hooks/use-search-term-with-local-storage', () => ({
   useSearchTermWithLocalStorage: () => ({
-    searchTerm: '',
+    searchTerm: currentSearchTerm,
     setSearchTerm: setSearchTermMock,
   }),
 }));
@@ -96,6 +100,7 @@ describe('HomePage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     pageValue = 1;
+    currentSearchTerm = '';
 
     (fetchCharacters as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
       results: [
@@ -188,5 +193,54 @@ describe('HomePage', () => {
     await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
 
     expect(screen.getByText(/API Error/i)).toBeInTheDocument();
+  });
+
+  it('does not render CharacterDetails when detailsId is missing', () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByTestId('character-details')).toBeNull();
+  });
+
+  it('renders CharacterDetails when detailsId is present', () => {
+    render(
+      <MemoryRouter initialEntries={['/?details=5']}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByTestId('character-details')).toHaveTextContent(
+      'Details for 5'
+    );
+  });
+
+  it('resets page to 1 when searchTerm changes and current page is not 1', async () => {
+    pageValue = 2;
+    currentSearchTerm = 'initial';
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
+    );
+
+    // Change searchTerm and rerender component
+    currentSearchTerm = 'newTerm';
+    rerender(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(setPageMock).toHaveBeenCalledWith(1);
+    });
   });
 });
