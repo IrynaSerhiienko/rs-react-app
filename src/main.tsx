@@ -1,12 +1,12 @@
 import './main.css';
 
-// import ErrorBoundary from '@/components/error-boundary/error-boundary.tsx';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
+import ErrorBoundary from '@/components/error-boundary/error-boundary.tsx';
+
 import App from './app';
-import { SearchProvider } from './context/search-provider';
 
 const ERROR_MESSAGE = 'Root container not found';
 
@@ -19,11 +19,9 @@ if (!container) {
 createRoot(container).render(
   <StrictMode>
     <BrowserRouter>
-      {/* <ErrorBoundary> */}
-      <SearchProvider>
+      <ErrorBoundary>
         <App />
-      </SearchProvider>
-      {/* </ErrorBoundary> */}
+      </ErrorBoundary>
     </BrowserRouter>
   </StrictMode>
 );
