@@ -3,10 +3,10 @@ import { Card } from '../card/card';
 
 interface CardListProps {
   items: Character[];
-  onCardClick: (id: number) => void;
+  onOpenDetails: (id: number) => void;
 }
 
-export function CardList({ items, onCardClick }: CardListProps) {
+export function CardList({ items, onOpenDetails }: CardListProps) {
   return (
     <div className="flex flex-col gap-4">
       {items.map((item) => (
@@ -16,7 +16,7 @@ export function CardList({ items, onCardClick }: CardListProps) {
           name={item.name}
           status={item.status}
           image={item.image}
-          onClick={onCardClick}
+          onOpenDetails={onOpenDetails}
         />
       ))}
     </div>

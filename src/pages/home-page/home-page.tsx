@@ -24,7 +24,7 @@ export function HomePage() {
   const prevSearchTerm = useRef(searchTerm);
   const navigate = useNavigate();
 
-  const onCardClick = (id: number) => {
+  const handleOpenDetails = (id: number) => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     params.set('details', id.toString());
@@ -120,7 +120,7 @@ export function HomePage() {
             )}
             {error && <p className="text-red-500">{error}</p>}
             {!loading && !error && (
-              <CardList items={data} onCardClick={onCardClick} />
+              <CardList items={data} onOpenDetails={handleOpenDetails} />
             )}
           </div>
         </div>
