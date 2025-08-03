@@ -1,5 +1,4 @@
 import type { Character } from '../../types/types';
-import { Title } from '../title/title';
 
 interface CardProps
   extends Pick<Character, 'id' | 'name' | 'status' | 'image'> {
@@ -19,9 +18,7 @@ export function Card({ id, name, status, image, onClick }: CardProps) {
     >
       <img src={image} alt={name} className="img-card-app w-20 h-20" />
       <div>
-        <Title level={3} className="h3-app">
-          {name}
-        </Title>
+        <h3 className="h3-app">{name}</h3>
         <p className="text-gray-600">Status: {status}</p>
       </div>
     </div>

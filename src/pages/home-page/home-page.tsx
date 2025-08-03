@@ -6,7 +6,6 @@ import { CardList } from '../../components/card-list/card-list';
 import { CharacterDetails } from '../../components/character-details/character-details';
 import { Pagination } from '../../components/pagination/pagination';
 import { Search } from '../../components/search/search';
-import { Title } from '../../components/title/title';
 import { TITLES } from '../../data/app-data';
 import { usePageWithLocalStorage } from '../../hooks/use-page-with-local-storage';
 import { useSearchTermWithLocalStorage } from '../../hooks/use-search-term-with-local-storage';
@@ -92,10 +91,7 @@ export function HomePage() {
   return (
     <div>
       {/* <div className="pt-[96px]"> */}
-      <Title level={1} className="h1-app flex mb-12 mt-8 justify-center">
-        {TITLES.HOME}
-      </Title>
-
+      <h1 className="h1-app flex mb-12 mt-8 justify-center">{TITLES.HOME}</h1>
       <Search
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

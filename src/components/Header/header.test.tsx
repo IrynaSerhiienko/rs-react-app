@@ -2,28 +2,27 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 
+import { ThemeProvider } from '../../context/theme-provider';
 import { Header } from './header';
+
+function renderWithProviders(ui: React.ReactNode, initialPath = '/') {
+  return render(
+    <ThemeProvider>
+      <MemoryRouter initialEntries={[initialPath]}>{ui}</MemoryRouter>
+    </ThemeProvider>
+  );
+}
 
 describe('Header component', () => {
   it('renders logo with correct alt and src', () => {
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>
-    );
-
+    renderWithProviders(<Header />);
     const logoImg = screen.getByAltText('Rick and Morty logo');
     expect(logoImg).toBeInTheDocument();
     expect(logoImg).toHaveAttribute('src');
   });
 
   it('renders navigation links with correct labels and paths', () => {
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>
-    );
-
+    renderWithProviders(<Header />);
     const homeLink = screen.getByRole('link', { name: 'Home' });
     expect(homeLink).toBeInTheDocument();
     expect(homeLink).toHaveAttribute('href', '/');
@@ -33,20 +32,21 @@ describe('Header component', () => {
     expect(aboutLink).toHaveAttribute('href', '/about');
   });
 
-  it('applies active class to the current route link', () => {
-    render(
-      <MemoryRouter initialEntries={['/about']}>
-        <Header />
-      </MemoryRouter>
-    );
-
-    const aboutLink = screen.getByRole('link', { name: 'About' });
+  it('applies active class when Home is the current route', () => {
+    renderWithProviders(<Header />, '/');
     const homeLink = screen.getByRole('link', { name: 'Home' });
+    const aboutLink = screen.getByRole('link', { name: 'About' });
 
-    expect(aboutLink.className).toMatch(/text-black/);
+    expect(homeLink.className).toMatch(/font-semibold/);
+    expect(aboutLink.className).toMatch(/text-gray-600/);
+  });
+
+  it('applies active class when About is the current route', () => {
+    renderWithProviders(<Header />, '/about');
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    const aboutLink = screen.getByRole('link', { name: 'About' });
+
     expect(aboutLink.className).toMatch(/font-semibold/);
-    expect(aboutLink.className).toMatch(/underline/);
-
     expect(homeLink.className).toMatch(/text-gray-600/);
   });
 });

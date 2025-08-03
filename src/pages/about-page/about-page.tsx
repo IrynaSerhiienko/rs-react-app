@@ -1,15 +1,9 @@
-import { Title } from '../../components/title/title';
 import { AUTHOR_INFO, COURSE_INFO, ICONS, TITLES } from '../../data/app-data';
-import { useTheme } from '../../hooks/use-theme';
 
 export function AboutPage() {
-  const { theme } = useTheme();
   return (
-    <div className="p-6 max-w-3xl mx-auto shadow-2xl rounded space-y-8 border border-gray-200 dark:border-gray-700">
-      <Title level={1} className="h1-app border-b pb-2">
-        {TITLES.ABOUT}
-      </Title>
-
+    <div className="px-4 py-2 max-w-3xl mx-auto shadow-2xl dark:text-black space-y-8 bg-gray-300 rounded">
+      <h1 className="h1-app border-b pb-2">{TITLES.ABOUT}</h1>
       <div className="flex items-center gap-6">
         <img
           src={AUTHOR_INFO.PHOTO}
@@ -17,9 +11,7 @@ export function AboutPage() {
           className="rounded-full h-30 w-30 object-cover border-1 border-primary shadow-md"
         />
         <div>
-          <Title level={2} className="h2-app">
-            {AUTHOR_INFO.NAME}
-          </Title>
+          <h2 className="h2-app">{AUTHOR_INFO.NAME}</h2>
           <p className="italic">{AUTHOR_INFO.ROLE}</p>
         </div>
       </div>
@@ -33,9 +25,7 @@ export function AboutPage() {
           className="transition duration-300 hover:drop-shadow-[0_0_4px_#FFDA1F] hover:opacity-70"
         >
           <img
-            src={
-              theme === 'dark' ? ICONS.GITHUB.SRC.LIGHT : ICONS.GITHUB.SRC.DARK
-            }
+            src={ICONS.GITHUB.SRC.DARK}
             alt={ICONS.GITHUB.ALT}
             className="w-6 h-6"
           />
@@ -49,11 +39,7 @@ export function AboutPage() {
           className="transition duration-300 hover:drop-shadow-[0_0_4px_#FFDA1F] hover:opacity-70"
         >
           <img
-            src={
-              theme === 'dark'
-                ? ICONS.LINKEDIN.SRC.LIGHT
-                : ICONS.LINKEDIN.SRC.DARK
-            }
+            src={ICONS.LINKEDIN.SRC.DARK}
             alt={ICONS.LINKEDIN.ALT}
             className="w-6 h-6"
           />

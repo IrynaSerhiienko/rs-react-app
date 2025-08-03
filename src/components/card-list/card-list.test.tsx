@@ -6,7 +6,7 @@ import { CardList } from './card-list';
 
 describe('CardList component', () => {
   it('renders a list of Card components with correct props', () => {
-    render(<CardList items={charactersMock} />);
+    render(<CardList items={charactersMock} onCardClick={() => {}} />);
 
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { fetchCharacterById } from '../../api/api';
 import type { Character } from '../../types/types';
-import { Title } from '../title/title';
 
 type CharacterDetailsProps = {
   id: string;
@@ -47,9 +46,7 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
         alt={character.name}
         className="img-card-app w-35 h-35 md:w-70 md:h-70 mb-4"
       />
-      <Title level={2} className="h2-app mb-4">
-        {character.name}
-      </Title>
+      <h2 className="h2-app mb-4">{character.name}</h2>
       <div className="flex flex-col gap-2 mb-4">
         <p>
           Status: <b>{character.status}</b>
