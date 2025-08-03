@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchCharacters } from '../../api/api';
 import { CardList } from '../../components/card-list/card-list';
 import { CharacterDetails } from '../../components/character-details/character-details';
+import { Flyout } from '../../components/flyout/flyout';
 import { Pagination } from '../../components/pagination/pagination';
 import { Search } from '../../components/search/search';
 import { TITLES } from '../../data/app-data';
@@ -31,26 +32,11 @@ export function HomePage() {
     navigate({ search: params.toString() });
   };
 
-  const closeDetails = () => {
+  const handleCloseDetails = () => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     setSearchParams(params);
   };
-
-  useEffect(() => {
-    if (searchTerm !== prevSearchTerm.current) {
-      prevSearchTerm.current = searchTerm;
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        if (params.get('page') !== '1') {
-          params.set('page', '1');
-          setPage(1);
-          return params;
-        }
-        return prev;
-      });
-    }
-  }, [searchTerm, setSearchParams, setPage]);
 
   const handleSearch = useCallback(async (term: string, currentPage = 1) => {
     try {
@@ -69,10 +55,6 @@ export function HomePage() {
     }
   }, []);
 
-  useEffect(() => {
-    handleSearch(searchTerm || '', page);
-  }, [searchTerm, page, handleSearch]);
-
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
 
@@ -85,6 +67,25 @@ export function HomePage() {
 
     setSearchParams(params);
   };
+
+  useEffect(() => {
+    if (searchTerm !== prevSearchTerm.current) {
+      prevSearchTerm.current = searchTerm;
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        if (params.get('page') !== '1') {
+          params.set('page', '1');
+          setPage(1);
+          return params;
+        }
+        return prev;
+      });
+    }
+  }, [searchTerm, setSearchParams, setPage]);
+
+  useEffect(() => {
+    handleSearch(searchTerm || '', page);
+  }, [searchTerm, page, handleSearch]);
 
   const detailsId = searchParams.get('details');
 
@@ -126,10 +127,11 @@ export function HomePage() {
 
         {detailsId && (
           <div className="w-1/2">
-            <CharacterDetails id={detailsId} onClose={closeDetails} />
+            <CharacterDetails id={detailsId} onClose={handleCloseDetails} />
           </div>
         )}
       </div>
+      <Flyout />
     </div>
   );
 }
