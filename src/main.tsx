@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import ErrorBoundary from '@/components/error-boundary/error-boundary.tsx';
 
 import App from './app';
+import { ThemeProvider } from './context/theme-provider';
 
 const ERROR_MESSAGE = 'Root container not found';
 
@@ -19,9 +20,11 @@ if (!container) {
 createRoot(container).render(
   <StrictMode>
     <BrowserRouter>
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
+      <ThemeProvider>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
 );

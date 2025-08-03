@@ -1,4 +1,5 @@
 import type { Character } from '../../types/types';
+import { Title } from '../title/title';
 
 interface CardProps
   extends Pick<Character, 'id' | 'name' | 'status' | 'image'> {
@@ -8,7 +9,7 @@ interface CardProps
 export function Card({ id, name, status, image, onClick }: CardProps) {
   return (
     <div
-      className="border p-4 rounded shadow bg-white flex items-center space-x-4 cursor-pointer"
+      className="dark:text-black px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 hover:text-white transition-all duration-300 cursor-pointer"
       onClick={() => onClick?.(id)}
       role="button"
       tabIndex={0}
@@ -16,13 +17,11 @@ export function Card({ id, name, status, image, onClick }: CardProps) {
         if (e.key === 'Enter') onClick?.(id);
       }}
     >
-      <img
-        src={image}
-        alt={name}
-        className="w-20 h-20 rounded-full object-cover border border-gray-300"
-      />
+      <img src={image} alt={name} className="img-card-app w-20 h-20" />
       <div>
-        <h3 className="text-xl font-bold">{name}</h3>
+        <Title level={3} className="h3-app">
+          {name}
+        </Title>
         <p className="text-gray-600">Status: {status}</p>
       </div>
     </div>

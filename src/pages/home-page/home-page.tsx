@@ -7,6 +7,7 @@ import { CharacterDetails } from '../../components/character-details/character-d
 import { Pagination } from '../../components/pagination/pagination';
 import { Search } from '../../components/search/search';
 import { Title } from '../../components/title/title';
+import { TITLES } from '../../data/app-data';
 import { usePageWithLocalStorage } from '../../hooks/use-page-with-local-storage';
 import { useSearchTermWithLocalStorage } from '../../hooks/use-search-term-with-local-storage';
 import type { Character } from '../../types/types';
@@ -89,12 +90,10 @@ export function HomePage() {
   const detailsId = searchParams.get('details');
 
   return (
-    <>
-      <Title
-        level={1}
-        className="text-2xl md:text-3xl font-bold flex mb-12 justify-center"
-      >
-        Rick and Morty Search
+    <div>
+      {/* <div className="pt-[96px]"> */}
+      <Title level={1} className="h1-app flex mb-12 mt-8 justify-center">
+        {TITLES.HOME}
       </Title>
 
       <Search
@@ -115,8 +114,8 @@ export function HomePage() {
         />
       )}
 
-      <div className="flex gap-6 mb-10">
-        <div className={detailsId ? 'flex-1' : 'w-full'}>
+      <div className="flex gap-6 mb-20">
+        <div className={detailsId ? 'w-1/2' : 'w-full'}>
           <div>
             {loading && (
               <p className="text-lg font-semibold p-3 animate-pulse text-center">
@@ -131,11 +130,11 @@ export function HomePage() {
         </div>
 
         {detailsId && (
-          <div className="w-1/3 pl-6">
+          <div className="w-1/2">
             <CharacterDetails id={detailsId} onClose={closeDetails} />
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

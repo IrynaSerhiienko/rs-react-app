@@ -1,3 +1,4 @@
+import { THEMES } from '../data/app-data';
 export interface Character {
   id: number;
   name: string;
@@ -15,3 +16,5 @@ export interface ErrorBoundaryState {
   hasError: boolean;
   throwError: boolean;
 }
+
+export type Theme = (typeof THEMES)[keyof typeof THEMES];

@@ -1,69 +1,80 @@
-# React + TypeScript + Vite
+# RS React App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application for searching characters from the **Rick and Morty API**.
 
-Currently, two official plugins are available:
+## 💡 Usage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Enter a character name into the search input to find matching results
+  > Example names: `Rick`, `Morty`, `Summer`, `Beth`, `Birdperson`, `Mr. Meeseeks`
+- Click on a character card to view detailed information
+- Use pagination to navigate between result pages
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Search characters by name
+- View detailed character information
+- Integrates with the public API: [https://rickandmortyapi.com](https://rickandmortyapi.com)
+- Client-side routing with `react-router-dom`
+- Styled with `Tailwind CSS`
+- Tested using `Vitest` and `@testing-library/react`
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📦 Installation
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Install dependencies:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## 🧪 Testing
+
+Tests are colocated with the components and API functions they cover, typically in the same directory.
+
+Covered scenarios:
+
+- API requests by name
+- Trimming whitespace in the search term
+- Handling 404 and 500 error responses
+
+### Run tests:
+
+```bash
+npm run test
+```
+
+### Run tests with coverage report:
+
+```bash
+npm run coverage
+```
+
+## 🛠 Available Scripts
+
+- `npm run dev` — start development server
+- `npm run build` — build for production
+- `npm run preview` — preview production build
+- `npm run lint` — run ESLint and fix issues
+- `npm run format` — format code with Prettier
+- `npm run test` — run tests
+- `npm run coverage` — run tests with coverage
+
+## 🌐 Environment Variables
+
+No environment variables required for this project.  
+The app fetches data directly from the public Rick and Morty API.
+
+## 📝 License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## 📬 Contact
+
+For questions or feedback, please open an issue or connect with me on [LinkedIn](https://www.linkedin.com/in/irynaserhiienko).

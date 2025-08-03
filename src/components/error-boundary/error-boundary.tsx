@@ -34,7 +34,7 @@ class ErrorBoundary extends Component<
     const errorButton = (
       <button
         onClick={this.handleThrow}
-        className="mt-4 p-2 bg-red-500 text-white rounded self-start w-auto cursor-pointer"
+        className="absolute bottom-4 right-30 p-2 btn-app cursor-pointer"
       >
         Error Button
       </button>
@@ -43,7 +43,7 @@ class ErrorBoundary extends Component<
     const retryButton = (
       <button
         onClick={this.handleRetry}
-        className="mt-4 p-2 bg-blue-500 text-white rounded self-start w-auto cursor-pointer"
+        className="absolute bottom-4 right-4 p-2 btn-app cursor-pointer"
       >
         Try again
       </button>
@@ -51,7 +51,7 @@ class ErrorBoundary extends Component<
 
     if (hasError) {
       return (
-        <div className="p-4 min-h-screen flex flex-col justify-between">
+        <div className="p-4 min-h-screen flex flex-col justify-between relative">
           <div className="my-4 p-4 text-red-600 font-bold text-xl text-center">
             Non-successful response.
           </div>
@@ -63,7 +63,7 @@ class ErrorBoundary extends Component<
     }
 
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen relative">
         <div className="flex-grow">{this.props.children}</div>
         {errorButton}
         <ErrorThrower shouldThrow={throwError} />

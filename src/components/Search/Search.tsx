@@ -31,7 +31,7 @@ export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
   }, [searchTerm]);
 
   return (
-    <div className="flex space-x-2 mb-4">
+    <div className="flex gap-2 mb-4">
       <input
         value={inputValue}
         onChange={handleChange}
@@ -41,7 +41,7 @@ export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
       />
       <button
         onClick={handleSearch}
-        className="	px-4 py-2 bg-gray-300 rounded cursor-pointer hover:bg-gray-400 hover:text-white transition-all duration-300"
+        className="btn-app cursor-pointer"
         type="button"
       >
         Search
