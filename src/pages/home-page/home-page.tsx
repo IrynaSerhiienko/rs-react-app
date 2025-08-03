@@ -90,7 +90,6 @@ export function HomePage() {
 
   return (
     <div>
-      {/* <div className="pt-[96px]"> */}
       <h1 className="h1-app flex mb-12 mt-8 justify-center">{TITLES.HOME}</h1>
       <Search
         searchTerm={searchTerm}
