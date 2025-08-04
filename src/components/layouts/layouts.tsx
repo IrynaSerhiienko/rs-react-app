@@ -5,9 +5,9 @@ import { Header } from '../header/header';
 
 export function AppLayout() {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-app text-app">
       <Header />
-      <main>
+      <main className="pt-[120px]">
         <LimitContainer>
           <Outlet />
         </LimitContainer>

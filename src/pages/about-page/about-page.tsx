@@ -1,71 +1,62 @@
-import { Title } from '../../components/title/title';
+import { AUTHOR_INFO, COURSE_INFO, ICONS, TITLES } from '../../data/app-data';
 
 export function AboutPage() {
-  const info = {
-    name: 'Irina',
-    role: 'Frontend Developer',
-    github: 'https://github.com/IrynaSerhiienko',
-    linkedin: 'https://www.linkedin.com/in/irynaserhiienko/',
-    photo: 'https://avatars.githubusercontent.com/u/108522040?v=4',
-  };
-
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white shadow-xl rounded-2xl space-y-8 border border-gray-100">
-      <Title
-        level={1}
-        className="text-4xl font-bold text-primary border-b pb-2"
-      >
-        About
-      </Title>
-
+    <div className="px-4 py-2 max-w-3xl mx-auto shadow-2xl dark:text-black space-y-8 bg-gray-300 rounded">
+      <h1 className="h1-app border-b pb-2">{TITLES.ABOUT}</h1>
       <div className="flex items-center gap-6">
         <img
-          src={info.photo}
-          alt={info.name}
+          src={AUTHOR_INFO.PHOTO}
+          alt={AUTHOR_INFO.NAME}
           className="rounded-full h-30 w-30 object-cover border-1 border-primary shadow-md"
         />
         <div>
-          <Title level={2} className="text-2xl font-semibold text-primary">
-            {info.name}
-          </Title>
-          <p className="text-base text-muted-foreground italic">{info.role}</p>
+          <h2 className="h2-app">{AUTHOR_INFO.NAME}</h2>
+          <p className="italic">{AUTHOR_INFO.ROLE}</p>
         </div>
       </div>
 
       <div className="flex gap-4">
         <a
-          href={info.github}
+          href={AUTHOR_INFO.GITHUB}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="GitHub"
+          aria-label={AUTHOR_INFO.ARIA.GITHUB}
           className="transition duration-300 hover:drop-shadow-[0_0_4px_#FFDA1F] hover:opacity-70"
         >
-          <img src="/github.svg" alt="GitHub" className="w-6 h-6" />
+          <img
+            src={ICONS.GITHUB.SRC.DARK}
+            alt={ICONS.GITHUB.ALT}
+            className="w-6 h-6"
+          />
         </a>
 
         <a
-          href={info.linkedin}
+          href={AUTHOR_INFO.LINKEDIN}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="LinkedIn"
           className="transition duration-300 hover:drop-shadow-[0_0_4px_#FFDA1F] hover:opacity-70"
         >
-          <img src="/linkedin.svg" alt="LinkedIn" className="w-6 h-6" />
+          <img
+            src={ICONS.LINKEDIN.SRC.DARK}
+            alt={ICONS.LINKEDIN.ALT}
+            className="w-6 h-6"
+          />
         </a>
       </div>
 
-      <p className="text-base text-gray-700 leading-relaxed">
-        Learn React at{' '}
+      <p>
+        {COURSE_INFO.TEXT}{' '}
         <a
-          href="https://rs.school/courses/reactjs"
+          href={COURSE_INFO.URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 underline hover:text-blue-800 font-medium"
+          className="text-blue-600 hover:text-blue-800 hover:underline underline-offset-4 transition duration-300"
         >
-          RS School React Course
+          {COURSE_INFO.NAME}
         </a>
-        , where practical skills and real-world tasks help you grow as a
-        developer.
+        {COURSE_INFO.DESC}
       </p>
     </div>
   );

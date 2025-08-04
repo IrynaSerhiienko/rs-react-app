@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { fetchCharacterById } from '../../api/api';
 import type { Character } from '../../types/types';
-import { Title } from '../title/title';
 
 type CharacterDetailsProps = {
   id: string;
@@ -45,11 +44,9 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
       <img
         src={character.image}
         alt={character.name}
-        className="w-60 h-60 rounded-full object-cover border border-gray-300 mb-4"
+        className="img-card-app w-35 h-35 md:w-70 md:h-70 mb-4"
       />
-      <Title level={2} className="flex text-2xl font-bold mb-4">
-        {character.name}
-      </Title>
+      <h2 className="h2-app mb-4">{character.name}</h2>
       <div className="flex flex-col gap-2 mb-4">
         <p>
           Status: <b>{character.status}</b>
@@ -61,10 +58,7 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
           Gender: <b>{character.gender}</b>
         </p>
       </div>
-      <button
-        onClick={onClose}
-        className="px-4 py-2 bg-gray-300 rounded cursor-pointer hover:bg-gray-400 hover:text-white transition-all duration-300"
-      >
+      <button onClick={onClose} className="btn-app cursor-pointer">
         Close
       </button>
     </div>

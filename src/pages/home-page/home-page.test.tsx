@@ -1,9 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { type FC } from 'react';
+import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { fetchCharacters } from '../../api/api';
+import { store } from '../../store';
 import { HomePage } from './home-page';
 
 let pageValue = 1;
@@ -113,9 +115,11 @@ describe('HomePage', () => {
 
   it('renders title and Search component', () => {
     render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByText(/Rick and Morty Search/i)).toBeInTheDocument();
@@ -124,9 +128,11 @@ describe('HomePage', () => {
 
   it('fetches and displays characters', async () => {
     render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
@@ -139,9 +145,11 @@ describe('HomePage', () => {
 
   it('handles pagination onPageChange', async () => {
     render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
@@ -158,11 +166,13 @@ describe('HomePage', () => {
 
   it('opens and closes CharacterDetails when detailsId is in URL', async () => {
     render(
-      <MemoryRouter initialEntries={['/?details=1']}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/?details=1']}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
@@ -185,9 +195,11 @@ describe('HomePage', () => {
     );
 
     render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
@@ -197,11 +209,13 @@ describe('HomePage', () => {
 
   it('does not render CharacterDetails when detailsId is missing', () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.queryByTestId('character-details')).toBeNull();
@@ -209,11 +223,13 @@ describe('HomePage', () => {
 
   it('renders CharacterDetails when detailsId is present', () => {
     render(
-      <MemoryRouter initialEntries={['/?details=5']}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/?details=5']}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByTestId('character-details')).toHaveTextContent(
@@ -226,17 +242,20 @@ describe('HomePage', () => {
     currentSearchTerm = 'initial';
 
     const { rerender } = render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </Provider>
     );
 
-    // Change searchTerm and rerender component
     currentSearchTerm = 'newTerm';
     rerender(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <HomePage />
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => {

@@ -4,9 +4,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchCharacters } from '../../api/api';
 import { CardList } from '../../components/card-list/card-list';
 import { CharacterDetails } from '../../components/character-details/character-details';
+import { Flyout } from '../../components/flyout/flyout';
 import { Pagination } from '../../components/pagination/pagination';
 import { Search } from '../../components/search/search';
-import { Title } from '../../components/title/title';
+import { TITLES } from '../../data/app-data';
 import { usePageWithLocalStorage } from '../../hooks/use-page-with-local-storage';
 import { useSearchTermWithLocalStorage } from '../../hooks/use-search-term-with-local-storage';
 import type { Character } from '../../types/types';
@@ -24,33 +25,18 @@ export function HomePage() {
   const prevSearchTerm = useRef(searchTerm);
   const navigate = useNavigate();
 
-  const onCardClick = (id: number) => {
+  const handleOpenDetails = (id: number) => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     params.set('details', id.toString());
     navigate({ search: params.toString() });
   };
 
-  const closeDetails = () => {
+  const handleCloseDetails = () => {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     setSearchParams(params);
   };
-
-  useEffect(() => {
-    if (searchTerm !== prevSearchTerm.current) {
-      prevSearchTerm.current = searchTerm;
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        if (params.get('page') !== '1') {
-          params.set('page', '1');
-          setPage(1);
-          return params;
-        }
-        return prev;
-      });
-    }
-  }, [searchTerm, setSearchParams, setPage]);
 
   const handleSearch = useCallback(async (term: string, currentPage = 1) => {
     try {
@@ -69,10 +55,6 @@ export function HomePage() {
     }
   }, []);
 
-  useEffect(() => {
-    handleSearch(searchTerm || '', page);
-  }, [searchTerm, page, handleSearch]);
-
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
 
@@ -86,17 +68,30 @@ export function HomePage() {
     setSearchParams(params);
   };
 
+  useEffect(() => {
+    if (searchTerm !== prevSearchTerm.current) {
+      prevSearchTerm.current = searchTerm;
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        if (params.get('page') !== '1') {
+          params.set('page', '1');
+          setPage(1);
+          return params;
+        }
+        return prev;
+      });
+    }
+  }, [searchTerm, setSearchParams, setPage]);
+
+  useEffect(() => {
+    handleSearch(searchTerm || '', page);
+  }, [searchTerm, page, handleSearch]);
+
   const detailsId = searchParams.get('details');
 
   return (
-    <>
-      <Title
-        level={1}
-        className="text-2xl md:text-3xl font-bold flex mb-12 justify-center"
-      >
-        Rick and Morty Search
-      </Title>
-
+    <div>
+      <h1 className="h1-app flex mb-12 mt-8 justify-center">{TITLES.HOME}</h1>
       <Search
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -115,8 +110,8 @@ export function HomePage() {
         />
       )}
 
-      <div className="flex gap-6 mb-10">
-        <div className={detailsId ? 'flex-1' : 'w-full'}>
+      <div className="flex gap-6 mb-20">
+        <div className={detailsId ? 'w-1/2' : 'w-full'}>
           <div>
             {loading && (
               <p className="text-lg font-semibold p-3 animate-pulse text-center">
@@ -125,17 +120,18 @@ export function HomePage() {
             )}
             {error && <p className="text-red-500">{error}</p>}
             {!loading && !error && (
-              <CardList items={data} onCardClick={onCardClick} />
+              <CardList items={data} onOpenDetails={handleOpenDetails} />
             )}
           </div>
         </div>
 
         {detailsId && (
-          <div className="w-1/3 pl-6">
-            <CharacterDetails id={detailsId} onClose={closeDetails} />
+          <div className="w-1/2">
+            <CharacterDetails id={detailsId} onClose={handleCloseDetails} />
           </div>
         )}
       </div>
-    </>
+      <Flyout />
+    </div>
   );
 }

@@ -1,12 +1,18 @@
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { describe, expect, it } from 'vitest';
 
+import { store } from '../../store';
 import { charactersMock } from '../../tests/mocks';
 import { CardList } from './card-list';
 
 describe('CardList component', () => {
   it('renders a list of Card components with correct props', () => {
-    render(<CardList items={charactersMock} />);
+    render(
+      <Provider store={store}>
+        <CardList items={charactersMock} onOpenDetails={() => {}} />
+      </Provider>
+    );
 
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();

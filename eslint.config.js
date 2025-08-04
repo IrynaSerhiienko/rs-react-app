@@ -1,6 +1,7 @@
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import js from '@eslint/js';
+import noCommentedCode from 'eslint-plugin-no-commented-code';
 import react from 'eslint-plugin-react';
 import reactCompiler from 'eslint-plugin-react-compiler';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -10,7 +11,7 @@ import tseslint from 'typescript-eslint';
 import unusedImports from 'eslint-plugin-unused-imports';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'coverage', '**/vite-env.d.ts'] },
   {
     extends: [
       js.configs.recommended,
@@ -29,6 +30,7 @@ export default tseslint.config(
       'react-compiler': reactCompiler,
       'simple-import-sort': simpleImportSort,
       'unused-imports': unusedImports,
+      'no-commented-code': noCommentedCode,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -51,6 +53,7 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
         },
       ],
+      'no-commented-code/no-commented-code': ['error'],
     },
     settings: {
       react: {
