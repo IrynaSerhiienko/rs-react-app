@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import CharacterDetails from './character-details';
-import { getErrorMessage } from '../../utils/get-error-message';
 import { useGetCharacterByIdQuery } from '../../store/api/characters-api';
+import { getErrorMessage } from '../../utils/get-error-message';
+import CharacterDetails from './character-details';
 
 vi.mock('../../store/api/characters-api', () => ({
   useGetCharacterByIdQuery: vi.fn(),
