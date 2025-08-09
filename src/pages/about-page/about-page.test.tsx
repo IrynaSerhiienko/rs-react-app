@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { ThemeContext } from '../../context/theme-context';
 import { ThemeProvider } from '../../context/theme-provider';
-import { AboutPage } from './about-page';
+import AboutPage from './about-page';
 
 function renderWithProviders(ui: React.ReactNode) {
   return render(<ThemeProvider>{ui}</ThemeProvider>);

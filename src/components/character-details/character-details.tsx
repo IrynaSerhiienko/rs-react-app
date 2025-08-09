@@ -1,42 +1,29 @@
-import { useEffect, useState } from 'react';
-
-import { fetchCharacterById } from '../../api/api';
-import type { Character } from '../../types/types';
+import { useGetCharacterByIdQuery } from '../../store/api/characters-api';
+import { getErrorMessage } from '../../utils/get-error-message';
+import { Spinner } from '../spinner/spinner';
 
 type CharacterDetailsProps = {
   id: string;
   onClose: () => void;
 };
 
-export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function CharacterDetails({
+  id,
+  onClose,
+}: CharacterDetailsProps) {
+  const characterId = Number(id);
+  const {
+    data: character,
+    error,
+    isLoading,
+  } = useGetCharacterByIdQuery(characterId, {
+    skip: !characterId,
+  });
 
-  useEffect(() => {
-    if (!id) {
-      setLoading(false);
-      return;
-    }
+  if (!id) return null;
 
-    async function loadCharacter() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchCharacterById(parseInt(id, 10));
-        setCharacter(data);
-      } catch {
-        setError('Failed to load character details');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadCharacter();
-  }, [id]);
-
-  if (loading) return <p>Loading details...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (isLoading) return <Spinner />;
+  if (error) return <p className="text-red-500">{getErrorMessage(error)}</p>;
   if (!character || !character.name) return <p>No character found</p>;
 
   return (
@@ -44,9 +31,9 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
       <img
         src={character.image}
         alt={character.name}
-        className="img-card-app w-35 h-35 md:w-70 md:h-70 mb-4"
+        className="mb-4 img-card-app w-35 h-35 md:w-70 md:h-70"
       />
-      <h2 className="h2-app mb-4">{character.name}</h2>
+      <h2 className="mb-4 h2-app">{character.name}</h2>
       <div className="flex flex-col gap-2 mb-4">
         <p>
           Status: <b>{character.status}</b>
@@ -58,7 +45,7 @@ export function CharacterDetails({ id, onClose }: CharacterDetailsProps) {
           Gender: <b>{character.gender}</b>
         </p>
       </div>
-      <button onClick={onClose} className="btn-app cursor-pointer">
+      <button onClick={onClose} className="cursor-pointer btn-app">
         Close
       </button>
     </div>

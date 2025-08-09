@@ -31,17 +31,17 @@ export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
   }, [searchTerm]);
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex w-3/4 gap-2">
       <input
         value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder="Search..."
-        className="p-2 border rounded w-full"
+        className="w-full p-2 border rounded"
       />
       <button
         onClick={handleSearch}
-        className="btn-app cursor-pointer"
+        className="cursor-pointer btn-app"
         type="button"
       >
         Search
