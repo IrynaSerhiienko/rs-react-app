@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { toggleItem } from '../../store/selected-items-slice';
+import { addItem, removeItem } from '../../store/selected-items-slice';
 import type { Character } from '../../types/types';
 
 interface CharacterSelectItemCheckboxProps {
@@ -16,7 +16,11 @@ export function CharacterSelectItemCheckbox({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
-    dispatch(toggleItem(character));
+    if (isSelected) {
+      dispatch(removeItem(character));
+    } else {
+      dispatch(addItem(character));
+    }
   };
 
   return (
@@ -25,7 +29,7 @@ export function CharacterSelectItemCheckbox({
       checked={isSelected}
       onChange={handleChange}
       aria-label={`Select ${character.name}`}
-      className="cursor-pointer w-5 h-5"
+      className="w-5 h-5 cursor-pointer"
     />
   );
 }

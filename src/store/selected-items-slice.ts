@@ -14,21 +14,20 @@ const selectedItemsSlice = createSlice({
   name: 'selectedItems',
   initialState,
   reducers: {
-    toggleItem(state, action: PayloadAction<Character>) {
+    addItem(state, action: PayloadAction<Character>) {
       const exists = state.items.some((item) => item.id === action.payload.id);
-      if (exists) {
-        state.items = state.items.filter(
-          (item) => item.id !== action.payload.id
-        );
-      } else {
+      if (!exists) {
         state.items.push(action.payload);
       }
     },
+    removeItem(state, action: PayloadAction<Character>) {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
     unselectAll(state) {
-      state.items = [];
+      state.items = initialState.items;
     },
   },
 });
 
-export const { toggleItem, unselectAll } = selectedItemsSlice.actions;
+export const { addItem, removeItem, unselectAll } = selectedItemsSlice.actions;
 export default selectedItemsSlice.reducer;
