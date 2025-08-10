@@ -58,7 +58,7 @@ export function Card(props: CardProps) {
         onChange={handleCheckboxChange}
         onKeyDown={handleCheckboxKeyDown}
         aria-label={`Select ${name}`}
-        className="absolute w-5 h-5 -translate-y-1/2 cursor-pointer top-1/2 right-4"
+        className="absolute w-5 h-5 cursor-pointer top-4 right-4 sm:top-1/2 sm:-translate-y-1/2"
       />
       <div
         className="flex items-center justify-between px-4 py-2 transition-all duration-300 bg-gray-300 rounded cursor-pointer dark:text-black hover:bg-gray-400 hover:text-white"
@@ -67,7 +67,7 @@ export function Card(props: CardProps) {
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center gap-4 sm:flex-row">
           <img src={image} alt={name} className="w-20 h-20 img-card-app" />
           <div>
             <h3 className="h3-app">{name}</h3>

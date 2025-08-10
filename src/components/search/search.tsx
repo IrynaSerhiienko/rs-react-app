@@ -31,7 +31,7 @@ export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
   }, [searchTerm]);
 
   return (
-    <div className="flex w-3/4 gap-2">
+    <div className="flex w-[75%] gap-2">
       <input
         value={inputValue}
         onChange={handleChange}

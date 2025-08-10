@@ -81,7 +81,7 @@ export function HomePage() {
   return (
     <div>
       <h1 className="flex justify-center mt-8 mb-12 h1-app">{TITLES.HOME}</h1>
-      <div className="flex gap-8 mb-4">
+      <div className="flex gap-4 mb-4">
         <Search
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -92,7 +92,7 @@ export function HomePage() {
         />
         <button
           onClick={handleRefresh}
-          className="w-1/4 cursor-pointer btn-app"
+          className="w-[25%] cursor-pointer btn-app"
         >
           Refresh
         </button>
