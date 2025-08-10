@@ -72,3 +72,7 @@ export const CHARACTERS_API = {
   DEFAULT_NAME: '',
   DEFAULT_PAGE: 1,
 } as const;
+
+export const KEY_CODES = {
+  ENTER: 'Enter',
+} as const;
