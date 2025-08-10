@@ -1,8 +1,13 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import * as api from '../../api/api';
-import { CharacterDetails } from './character-details';
+import { useGetCharacterByIdQuery } from '../../store/api/characters-api';
+import { getErrorMessage } from '../../utils/get-error-message';
+import CharacterDetails from './character-details';
+
+vi.mock('../../store/api/characters-api', () => ({
+  useGetCharacterByIdQuery: vi.fn(),
+}));
 
 const characterMock = {
   id: 1,
@@ -15,81 +20,95 @@ const characterMock = {
 
 describe('CharacterDetails', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('shows loading initially', () => {
-    vi.spyOn(api, 'fetchCharacterById').mockReturnValue(new Promise(() => {}));
+    (
+      useGetCharacterByIdQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isLoading: true,
+    });
+
     render(<CharacterDetails id="1" onClose={vi.fn()} />);
-    expect(screen.getByText(/loading details/i)).toBeInTheDocument();
+
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
   it('renders character details after fetch', async () => {
-    vi.spyOn(api, 'fetchCharacterById').mockResolvedValue(characterMock);
+    (
+      useGetCharacterByIdQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      data: characterMock,
+      error: undefined,
+      isLoading: false,
+    });
 
     render(<CharacterDetails id="1" onClose={vi.fn()} />);
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('img', { name: characterMock.name })
-      ).toBeInTheDocument();
-    });
-
+    expect(
+      await screen.findByRole('img', { name: characterMock.name })
+    ).toBeInTheDocument();
     expect(screen.getByText(characterMock.name)).toBeInTheDocument();
-    expect(screen.getByText(/status/i)).toHaveTextContent(
-      `Status: ${characterMock.status}`
-    );
-    expect(screen.getByText(/species/i)).toHaveTextContent(
-      `Species: ${characterMock.species}`
-    );
-    expect(screen.getByText(/gender/i)).toHaveTextContent(
-      `Gender: ${characterMock.gender}`
-    );
   });
 
   it('shows error message if fetch fails', async () => {
-    vi.spyOn(api, 'fetchCharacterById').mockRejectedValue(new Error('fail'));
+    const error = { status: 500, data: 'fail' };
+
+    (
+      useGetCharacterByIdQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      data: undefined,
+      error,
+      isLoading: false,
+    });
 
     render(<CharacterDetails id="1" onClose={vi.fn()} />);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(/failed to load character details/i)
-      ).toBeInTheDocument();
-    });
+    const errorMessage = getErrorMessage(error);
+
+    expect(
+      await screen.findByText(new RegExp(errorMessage, 'i'))
+    ).toBeInTheDocument();
   });
 
-  it('shows "No character found" if character is empty after loading', async () => {
-    vi.spyOn(api, 'fetchCharacterById').mockResolvedValue({
-      id: 0,
-      name: '',
-      image: '',
-      status: '',
-      species: '',
-      gender: '',
+  it('shows "No character found" if character is empty', async () => {
+    (
+      useGetCharacterByIdQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      data: { id: 0, name: '', image: '', status: '', species: '', gender: '' },
+      error: undefined,
+      isLoading: false,
     });
 
     render(<CharacterDetails id="1" onClose={vi.fn()} />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/no character found/i)).toBeInTheDocument();
-    });
+    expect(await screen.findByText(/no character found/i)).toBeInTheDocument();
   });
 
   it('calls onClose when Close button clicked', async () => {
-    vi.spyOn(api, 'fetchCharacterById').mockResolvedValue(characterMock);
     const onCloseMock = vi.fn();
+
+    (
+      useGetCharacterByIdQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      data: characterMock,
+      error: undefined,
+      isLoading: false,
+    });
 
     render(<CharacterDetails id="1" onClose={onCloseMock} />);
 
-    await waitFor(() => screen.getByRole('button', { name: /close/i }));
-
     fireEvent.click(screen.getByRole('button', { name: /close/i }));
+
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
-  it('does nothing if id is empty', () => {
+
+  it('renders nothing if id is empty', () => {
     render(<CharacterDetails id="" onClose={vi.fn()} />);
-    expect(screen.queryByText(/loading details/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
 });

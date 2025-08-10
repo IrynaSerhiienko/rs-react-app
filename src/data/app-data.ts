@@ -62,3 +62,18 @@ export const NAV_ITEMS = [
   { to: '/', label: 'Home', end: true },
   { to: '/about', label: 'About' },
 ];
+
+export const ROUTES = { ABOUT: '/about' } as const;
+
+export const CHARACTERS_API = {
+  BASE_URL: 'https://rickandmortyapi.com/api/',
+  REDUCER_PATH: 'charactersApi',
+  PATH_CHARACTER: 'character',
+  DEFAULT_NAME: '',
+  DEFAULT_PAGE: 1,
+} as const;
+
+export const KEY_CODES = {
+  ENTER: 'Enter',
+  SPACE: ' ',
+} as const;

@@ -1,29 +1,39 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { fetchCharacters } from '../../api/api';
 import { CardList } from '../../components/card-list/card-list';
-import { CharacterDetails } from '../../components/character-details/character-details';
 import { Flyout } from '../../components/flyout/flyout';
 import { Pagination } from '../../components/pagination/pagination';
 import { Search } from '../../components/search/search';
+import { Spinner } from '../../components/spinner/spinner';
 import { TITLES } from '../../data/app-data';
 import { usePageWithLocalStorage } from '../../hooks/use-page-with-local-storage';
 import { useSearchTermWithLocalStorage } from '../../hooks/use-search-term-with-local-storage';
-import type { Character } from '../../types/types';
+import { useGetCharactersQuery } from '../../store/api/characters-api';
+import { getErrorMessage } from '../../utils/get-error-message';
+
+const CharacterDetails = lazy(
+  () => import('../../components/character-details/character-details')
+);
 
 export function HomePage() {
   const { searchTerm, setSearchTerm } = useSearchTermWithLocalStorage();
   const { page, setPage } = usePageWithLocalStorage();
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<Character[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
+  const [forceRefresh, setForceRefresh] = useState(false);
+  const { data, error, isLoading, isError } = useGetCharactersQuery({
+    name: searchTerm || '',
+    page,
+    forceRefresh,
+  });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const prevSearchTerm = useRef(searchTerm);
   const navigate = useNavigate();
+
+  const handleRefresh = () => {
+    setForceRefresh(true);
+    setTimeout(() => setForceRefresh(false), 0);
+  };
 
   const handleOpenDetails = (id: number) => {
     const params = new URLSearchParams();
@@ -37,23 +47,6 @@ export function HomePage() {
     params.set('page', page.toString());
     setSearchParams(params);
   };
-
-  const handleSearch = useCallback(async (term: string, currentPage = 1) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const res = await fetchCharacters({ name: term, page: currentPage });
-      setData(res.results);
-      setTotalPages(res.info.pages);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Something went wrong';
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -83,29 +76,33 @@ export function HomePage() {
     }
   }, [searchTerm, setSearchParams, setPage]);
 
-  useEffect(() => {
-    handleSearch(searchTerm || '', page);
-  }, [searchTerm, page, handleSearch]);
-
   const detailsId = searchParams.get('details');
 
   return (
     <div>
-      <h1 className="h1-app flex mb-12 mt-8 justify-center">{TITLES.HOME}</h1>
-      <Search
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        onSearch={(term: string) => {
-          setSearchTerm(term);
-          setPage(1);
-          handleSearch(term, 1);
-        }}
-      />
+      <h1 className="flex justify-center mt-8 mb-12 h1-app">{TITLES.HOME}</h1>
+      <div className="flex gap-4 mb-4">
+        <Search
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onSearch={(term: string) => {
+            setSearchTerm(term);
+            setPage(1);
+          }}
+        />
+        <button
+          onClick={handleRefresh}
+          title="You can refresh again after 1 minute"
+          className="w-[25%] cursor-pointer btn-app"
+        >
+          Refresh
+        </button>
+      </div>
 
       {!error && (
         <Pagination
           currentPage={page}
-          totalPages={totalPages}
+          totalPages={data?.info.pages ?? 1}
           onPageChange={handlePageChange}
         />
       )}
@@ -113,21 +110,26 @@ export function HomePage() {
       <div className="flex gap-6 mb-20">
         <div className={detailsId ? 'w-1/2' : 'w-full'}>
           <div>
-            {loading && (
-              <p className="text-lg font-semibold p-3 animate-pulse text-center">
-                Loading...
+            {isLoading && <Spinner />}
+            {isError && (
+              <p className="flex justify-center m-4 text-red-500 h2-app">
+                {getErrorMessage(error)}
               </p>
             )}
-            {error && <p className="text-red-500">{error}</p>}
-            {!loading && !error && (
-              <CardList items={data} onOpenDetails={handleOpenDetails} />
+            {!isLoading && !isError && data && (
+              <CardList
+                items={data.results}
+                onOpenDetails={handleOpenDetails}
+              />
             )}
           </div>
         </div>
 
         {detailsId && (
           <div className="w-1/2">
-            <CharacterDetails id={detailsId} onClose={handleCloseDetails} />
+            <Suspense fallback={<Spinner />}>
+              <CharacterDetails id={detailsId} onClose={handleCloseDetails} />
+            </Suspense>
           </div>
         )}
       </div>

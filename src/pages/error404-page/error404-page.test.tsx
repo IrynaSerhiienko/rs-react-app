@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Error404Page } from './error404-page';
+import Error404Page from './error404-page';
 
 const mockNavigate = vi.fn();
 

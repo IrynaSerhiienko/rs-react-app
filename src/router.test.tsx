@@ -17,11 +17,11 @@ vi.mock('./pages/home-page/home-page', () => ({
 }));
 
 vi.mock('./pages/about-page/about-page', () => ({
-  AboutPage: () => <div data-testid="about-page">About Page</div>,
+  default: () => <div data-testid="about-page">About Page</div>,
 }));
 
 vi.mock('./pages/error404-page/error404-page', () => ({
-  Error404Page: () => <div data-testid="error404-page">404 Page</div>,
+  default: () => <div data-testid="error404-page">404 Page</div>,
 }));
 
 describe('AppRoutes', () => {
@@ -35,23 +35,23 @@ describe('AppRoutes', () => {
     expect(screen.getByTestId('home-page')).toBeInTheDocument();
   });
 
-  it('renders AboutPage on route "/about"', () => {
+  it('renders AboutPage on route "/about"', async () => {
     render(
       <MemoryRouter initialEntries={['/about']}>
         <AppRoutes />
       </MemoryRouter>
     );
     expect(screen.getByTestId('app-layout')).toBeInTheDocument();
-    expect(screen.getByTestId('about-page')).toBeInTheDocument();
+    expect(await screen.findByTestId('about-page')).toBeInTheDocument();
   });
 
-  it('renders Error404Page on unknown route', () => {
+  it('renders Error404Page on unknown route', async () => {
     render(
       <MemoryRouter initialEntries={['/unknown']}>
         <AppRoutes />
       </MemoryRouter>
     );
     expect(screen.getByTestId('app-layout')).toBeInTheDocument();
-    expect(screen.getByTestId('error404-page')).toBeInTheDocument();
+    expect(await screen.findByTestId('error404-page')).toBeInTheDocument();
   });
 });

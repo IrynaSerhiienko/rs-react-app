@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import type { Character } from '../types/types';
-import reducer, { toggleItem, unselectAll } from './selected-items-slice';
+import reducer, {
+  addItem,
+  removeItem,
+  unselectAll,
+} from './selected-items-slice';
 
 describe('selectedItemsSlice', () => {
   const initialState = { items: [] as Character[] };
@@ -23,21 +27,35 @@ describe('selectedItemsSlice', () => {
   });
 
   it('should add an item if it does not exist', () => {
-    const action = toggleItem(character1);
+    const action = addItem(character1);
     const state = reducer(initialState, action);
     expect(state.items).toEqual([character1]);
   });
 
-  it('should remove an item if it already exists', () => {
+  it('should NOT add an item if it already exists', () => {
     const stateWithItem = { items: [character1] };
-    const action = toggleItem(character1);
+    const action = addItem(character1);
     const state = reducer(stateWithItem, action);
-    expect(state.items).toEqual([]);
+    expect(state.items).toEqual([character1]);
+  });
+
+  it('should remove an existing item', () => {
+    const stateWithItem = { items: [character1, character2] };
+    const action = removeItem(character1);
+    const state = reducer(stateWithItem, action);
+    expect(state.items).toEqual([character2]);
+  });
+
+  it('should do nothing when removing an item that does not exist', () => {
+    const stateWithItem = { items: [character2] };
+    const action = removeItem(character1);
+    const state = reducer(stateWithItem, action);
+    expect(state.items).toEqual([character2]);
   });
 
   it('should add multiple different items', () => {
-    const state = reducer(initialState, toggleItem(character1));
-    const newState = reducer(state, toggleItem(character2));
+    const state = reducer(initialState, addItem(character1));
+    const newState = reducer(state, addItem(character2));
     expect(newState.items).toEqual([character1, character2]);
   });
 

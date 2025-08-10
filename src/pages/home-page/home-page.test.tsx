@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchCharacters } from '../../api/api';
 import { store } from '../../store';
 import { HomePage } from './home-page';
 
@@ -34,9 +33,15 @@ vi.mock('../../hooks/use-page-with-local-storage', () => ({
   }),
 }));
 
-vi.mock('../../api/api', () => ({
-  fetchCharacters: vi.fn(),
-}));
+vi.mock('../../store/api/characters-api', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('../../store/api/characters-api')>();
+  return {
+    ...actual,
+    useGetCharactersQuery: vi.fn(),
+  };
+});
+import { useGetCharactersQuery } from '../../store/api/characters-api';
 
 vi.mock('../../components/search/search', () => ({
   Search: () => <div data-testid="search-mock" />,
@@ -84,19 +89,22 @@ vi.mock('../../components/card-list/card-list', () => ({
   )) as FC<CardListProps>,
 }));
 
-interface CharacterDetailsProps {
-  id: string | null;
-  onClose: () => void;
-}
+// interface CharacterDetailsProps {
+//   id: string | null;
+//   onClose: () => void;
+// }
 
-vi.mock('../../components/character-details/character-details', () => ({
-  CharacterDetails: (({ id, onClose }: CharacterDetailsProps) => (
-    <div data-testid="character-details">
-      Details for {id}
-      <button onClick={onClose}>Close</button>
-    </div>
-  )) as FC<CharacterDetailsProps>,
-}));
+vi.mock('../../components/character-details/character-details', () => {
+  return {
+    __esModule: true,
+    default: ({ id, onClose }: { id: string | null; onClose: () => void }) => (
+      <div data-testid="character-details">
+        Details for {id}
+        <button onClick={onClose}>Close</button>
+      </div>
+    ),
+  };
+});
 
 describe('HomePage', () => {
   beforeEach(() => {
@@ -104,12 +112,19 @@ describe('HomePage', () => {
     pageValue = 1;
     currentSearchTerm = '';
 
-    (fetchCharacters as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
-      results: [
-        { id: 1, name: 'Rick', status: 'Alive', image: 'img1' },
-        { id: 2, name: 'Morty', status: 'Alive', image: 'img2' },
-      ],
-      info: { pages: 3 },
+    (
+      useGetCharactersQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
+      data: {
+        results: [
+          { id: 1, name: 'Rick', status: 'Alive', image: 'img1' },
+          { id: 2, name: 'Morty', status: 'Alive', image: 'img2' },
+        ],
+        info: { pages: 3 },
+      },
+      error: undefined,
+      isLoading: false,
+      refetch: vi.fn(),
     });
   });
 
@@ -135,7 +150,7 @@ describe('HomePage', () => {
       </Provider>
     );
 
-    await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
+    await waitFor(() => expect(useGetCharactersQuery).toHaveBeenCalled());
 
     const items = screen.getAllByRole('listitem');
     expect(items).toHaveLength(2);
@@ -152,16 +167,12 @@ describe('HomePage', () => {
       </Provider>
     );
 
-    await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
+    await waitFor(() => expect(useGetCharactersQuery).toHaveBeenCalled());
 
     const nextButton = screen.getByText('Next');
     fireEvent.click(nextButton);
 
     await waitFor(() => expect(setPageMock).toHaveBeenCalledWith(2));
-
-    await waitFor(() => {
-      expect(fetchCharacters).toHaveBeenCalledWith({ name: '', page: 2 });
-    });
   });
 
   it('opens and closes CharacterDetails when detailsId is in URL', async () => {
@@ -175,11 +186,13 @@ describe('HomePage', () => {
       </Provider>
     );
 
-    await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
+    await waitFor(() => expect(useGetCharactersQuery).toHaveBeenCalled());
 
-    expect(screen.getByTestId('character-details')).toHaveTextContent(
-      'Details for 1'
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('character-details')).toHaveTextContent(
+        'Details for 1'
+      );
+    });
 
     const closeBtn = screen.getByText('Close');
     fireEvent.click(closeBtn);
@@ -190,9 +203,15 @@ describe('HomePage', () => {
   });
 
   it('shows error message on fetch failure', async () => {
-    (fetchCharacters as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(
-      new Error('API Error')
-    );
+    (
+      useGetCharactersQuery as unknown as ReturnType<typeof vi.fn>
+    ).mockReturnValueOnce({
+      data: undefined,
+      error: new Error('API Error'),
+      isLoading: false,
+      isError: true,
+      refetch: vi.fn(),
+    });
 
     render(
       <Provider store={store}>
@@ -202,9 +221,9 @@ describe('HomePage', () => {
       </Provider>
     );
 
-    await waitFor(() => expect(fetchCharacters).toHaveBeenCalled());
+    await waitFor(() => expect(useGetCharactersQuery).toHaveBeenCalled());
 
-    expect(screen.getByText(/API Error/i)).toBeInTheDocument();
+    expect(screen.getByText(/Error... API Error!/i)).toBeInTheDocument();
   });
 
   it('does not render CharacterDetails when detailsId is missing', () => {

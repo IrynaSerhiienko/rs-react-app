@@ -1,14 +1,14 @@
 import { AUTHOR_INFO, COURSE_INFO, ICONS, TITLES } from '../../data/app-data';
 
-export function AboutPage() {
+export default function AboutPage() {
   return (
-    <div className="px-4 py-2 max-w-3xl mx-auto shadow-2xl dark:text-black space-y-8 bg-gray-300 rounded">
-      <h1 className="h1-app border-b pb-2">{TITLES.ABOUT}</h1>
+    <div className="max-w-3xl px-4 py-2 mx-auto space-y-8 bg-gray-300 rounded shadow-2xl dark:text-black">
+      <h1 className="pb-2 border-b h1-app">{TITLES.ABOUT}</h1>
       <div className="flex items-center gap-6">
         <img
           src={AUTHOR_INFO.PHOTO}
           alt={AUTHOR_INFO.NAME}
-          className="rounded-full h-30 w-30 object-cover border-1 border-primary shadow-md"
+          className="object-cover rounded-full shadow-md h-30 w-30 border-1 border-primary"
         />
         <div>
           <h2 className="h2-app">{AUTHOR_INFO.NAME}</h2>
@@ -52,7 +52,7 @@ export function AboutPage() {
           href={COURSE_INFO.URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 hover:underline underline-offset-4 transition duration-300"
+          className="text-blue-600 transition duration-300 hover:text-blue-800 hover:underline underline-offset-4"
         >
           {COURSE_INFO.NAME}
         </a>
