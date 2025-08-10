@@ -75,4 +75,5 @@ export const CHARACTERS_API = {
 
 export const KEY_CODES = {
   ENTER: 'Enter',
+  SPACE: ' ',
 } as const;

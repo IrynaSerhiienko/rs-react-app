@@ -15,12 +15,25 @@ export function Card(props: CardProps) {
   const selectedItems = useAppSelector((state) => state.selectedItems.items);
   const isSelected = selectedItems.some((item) => item.id === id);
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.stopPropagation();
+  const toggleSelection = () => {
     if (isSelected) {
       dispatch(removeItem({ id, name, status, image }));
     } else {
       dispatch(addItem({ id, name, status, image }));
+    }
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    toggleSelection();
+  };
+
+  const handleCheckboxKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === KEY_CODES.SPACE || event.key === KEY_CODES.ENTER) {
+      event.preventDefault();
+      toggleSelection();
     }
   };
 
@@ -43,6 +56,7 @@ export function Card(props: CardProps) {
         type="checkbox"
         checked={isSelected}
         onChange={handleCheckboxChange}
+        onKeyDown={handleCheckboxKeyDown}
         aria-label={`Select ${name}`}
         className="absolute w-5 h-5 -translate-y-1/2 cursor-pointer top-1/2 right-4"
       />
