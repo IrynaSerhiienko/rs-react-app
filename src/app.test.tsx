@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, test } from 'vitest';
 
-import App from './App';
+import App from './app';
 import { ThemeProvider } from './context/theme-provider';
 import { store } from './store';
 
