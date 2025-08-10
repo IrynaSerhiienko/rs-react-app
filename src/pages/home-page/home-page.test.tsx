@@ -209,6 +209,7 @@ describe('HomePage', () => {
       data: undefined,
       error: new Error('API Error'),
       isLoading: false,
+      isError: true,
       refetch: vi.fn(),
     });
 
@@ -222,7 +223,7 @@ describe('HomePage', () => {
 
     await waitFor(() => expect(useGetCharactersQuery).toHaveBeenCalled());
 
-    expect(screen.getByText(/API Error/i)).toBeInTheDocument();
+    expect(screen.getByText(/Error... API Error!/i)).toBeInTheDocument();
   });
 
   it('does not render CharacterDetails when detailsId is missing', () => {

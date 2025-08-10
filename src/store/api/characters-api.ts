@@ -16,16 +16,20 @@ export const charactersApi = createApi({
   endpoints: (builder) => ({
     getCharacters: builder.query<
       { results: Character[]; info: { pages: number } },
-      FetchCharactersParams
+      FetchCharactersParams & { forceRefresh?: boolean }
     >({
       query: ({
         name = CHARACTERS_API.DEFAULT_NAME,
         page = CHARACTERS_API.DEFAULT_PAGE,
+        forceRefresh = false,
       }) => {
         const searchParams = new URLSearchParams();
         searchParams.set('page', String(page));
         if (name.trim()) {
           searchParams.set('name', name.trim());
+        }
+        if (forceRefresh) {
+          searchParams.set('_ts', Date.now().toString());
         }
         const url = `${CHARACTERS_API.PATH_CHARACTER}/?${searchParams.toString()}`;
         return url;

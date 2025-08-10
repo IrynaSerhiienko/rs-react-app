@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { CardList } from '../../components/card-list/card-list';
@@ -19,14 +19,21 @@ const CharacterDetails = lazy(
 export function HomePage() {
   const { searchTerm, setSearchTerm } = useSearchTermWithLocalStorage();
   const { page, setPage } = usePageWithLocalStorage();
-  const { data, error, isLoading, refetch } = useGetCharactersQuery({
+  const [forceRefresh, setForceRefresh] = useState(false);
+  const { data, error, isLoading, isError } = useGetCharactersQuery({
     name: searchTerm || '',
     page,
+    forceRefresh,
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const prevSearchTerm = useRef(searchTerm);
   const navigate = useNavigate();
+
+  const handleRefresh = () => {
+    setForceRefresh(true);
+    setTimeout(() => setForceRefresh(false), 0);
+  };
 
   const handleOpenDetails = (id: number) => {
     const params = new URLSearchParams();
@@ -84,7 +91,7 @@ export function HomePage() {
           }}
         />
         <button
-          onClick={() => refetch()}
+          onClick={handleRefresh}
           className="w-1/4 cursor-pointer btn-app"
         >
           Refresh
@@ -103,8 +110,10 @@ export function HomePage() {
         <div className={detailsId ? 'w-1/2' : 'w-full'}>
           <div>
             {isLoading && <Spinner />}
-            {error && <p className="text-red-500">{getErrorMessage(error)}</p>}
-            {!isLoading && !error && data && (
+            {isError && (
+              <p className="text-red-500">{getErrorMessage(error)}</p>
+            )}
+            {!isLoading && !isError && data && (
               <CardList
                 items={data.results}
                 onOpenDetails={handleOpenDetails}
