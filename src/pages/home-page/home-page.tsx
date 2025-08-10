@@ -92,6 +92,7 @@ export function HomePage() {
         />
         <button
           onClick={handleRefresh}
+          title="You can refresh again after 1 minute"
           className="w-[25%] cursor-pointer btn-app"
         >
           Refresh
@@ -111,7 +112,9 @@ export function HomePage() {
           <div>
             {isLoading && <Spinner />}
             {isError && (
-              <p className="text-red-500">{getErrorMessage(error)}</p>
+              <p className="flex justify-center m-4 text-red-500 h2-app">
+                {getErrorMessage(error)}
+              </p>
             )}
             {!isLoading && !isError && data && (
               <CardList
