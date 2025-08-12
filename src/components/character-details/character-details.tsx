@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { useGetCharacterByIdQuery } from '../../store/api/characters-api';
 import { getErrorMessage } from '../../utils/get-error-message';
 import { Spinner } from '../spinner/spinner';
@@ -28,11 +30,14 @@ export default function CharacterDetails({
 
   return (
     <div>
-      <img
-        src={character.image}
-        alt={character.name}
-        className="mb-4 img-card-app w-35 h-35 md:w-70 md:h-70"
-      />
+      <div className="relative mb-4 w-35 h-35 md:w-70 md:h-70 img-card-app">
+        <Image
+          src={character.image}
+          alt={character.name}
+          fill
+          style={{ objectFit: 'contain' }}
+        />
+      </div>
       <h2 className="mb-4 h2-app">{character.name}</h2>
       <div className="flex flex-col gap-2 mb-4">
         <p>

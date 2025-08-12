@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { NavLink } from 'react-router-dom';
 
 import { ICONS, NAV_ITEMS } from '../../data/app-data';
@@ -27,13 +28,18 @@ export function Header() {
     <header className="fixed top-0 left-0 z-50 w-full py-4 shadow-md bg-app">
       <LimitContainer className="flex-row items-center justify-between">
         <NavLink to="/" className="flex items-center basis-[10%]">
-          <img
-            src={
-              theme === THEMES.DARK ? ICONS.LOGO.SRC.LIGHT : ICONS.LOGO.SRC.DARK
-            }
-            alt={ICONS.LOGO.ALT}
-            className="w-auto h-16"
-          />
+          <div className="relative w-auto h-16">
+            <Image
+              src={
+                theme === THEMES.DARK
+                  ? ICONS.LOGO.SRC.LIGHT
+                  : ICONS.LOGO.SRC.DARK
+              }
+              alt={ICONS.LOGO.ALT}
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </div>
         </NavLink>
         <div className="flex gap-8 justify-end basis-[70%]">
           {NAV_ITEMS.map(({ to, label, end }) => (

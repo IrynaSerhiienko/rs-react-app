@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { KEY_CODES } from '../../data/app-data';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { addItem, removeItem } from '../../store/selected-items-slice';
@@ -68,7 +70,14 @@ export function Card(props: CardProps) {
         onKeyDown={handleKeyDown}
       >
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <img src={image} alt={name} className="w-20 h-20 img-card-app" />
+          <div className="relative w-20 h-20 img-card-app">
+            <Image
+              src={image}
+              alt={name}
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </div>
           <div>
             <h3 className="h3-app">{name}</h3>
             <p className="text-gray-600">Status: {status}</p>
