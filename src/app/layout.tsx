@@ -1,9 +1,10 @@
-import type { Metadata } from 'next';
+import './index.css';
 
-export const metadata: Metadata = {
-  title: 'My App',
-  description: 'My App is a...',
+export const metadata = {
+  title: 'Rick and Morty',
+  description: 'Rick and Morty App',
 };
+
 export default function RootLayout({
   children,
 }: {
@@ -11,9 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <div id="root">{children}</div>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

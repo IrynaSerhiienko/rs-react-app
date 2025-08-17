@@ -34,7 +34,7 @@ class ErrorBoundary extends Component<
     const errorButton = (
       <button
         onClick={this.handleThrow}
-        className="absolute bottom-4 right-30 p-2 btn-app cursor-pointer"
+        className="absolute bottom-4 right-30 p-2 dark:text-[var(--color-black)] px-4 py-2 bg-[var(--color-gray-300)] rounded hover:bg-[var(--color-gray-400)] hover:text-[var(--color-white)] transition-all duration-300 cursor-pointer"
       >
         Error Button
       </button>
@@ -43,7 +43,7 @@ class ErrorBoundary extends Component<
     const retryButton = (
       <button
         onClick={this.handleRetry}
-        className="absolute bottom-4 right-4 p-2 btn-app cursor-pointer"
+        className="absolute bottom-4 right-4 p-2 dark:text-[var(--color-black)] px-4 py-2 bg-[var(--color-gray-300)] rounded hover:bg-[var(--color-gray-400)] hover:text-[var(--color-white)] transition-all duration-300 cursor-pointer"
       >
         Try again
       </button>
@@ -52,7 +52,7 @@ class ErrorBoundary extends Component<
     if (hasError) {
       return (
         <div className="p-4 min-h-screen flex flex-col justify-between relative">
-          <div className="my-4 p-4 text-red-600 font-bold text-xl text-center">
+          <div className="my-4 p-4 text-[var(--color-red-600)] font-bold text-xl text-center">
             Non-successful response.
           </div>
           <div className="flex gap-4">

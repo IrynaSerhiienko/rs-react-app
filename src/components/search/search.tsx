@@ -1,6 +1,8 @@
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import { useEffect, useState } from 'react';
 
+import { KEY_CODES, useSearchData } from '../../data/app-data';
+
 type SearchProps = {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
@@ -8,6 +10,7 @@ type SearchProps = {
 };
 
 export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
+  const { PLACEHOLDER, SEARCH_BUTTON } = useSearchData();
   const [inputValue, setInputValue] = useState(searchTerm);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +24,7 @@ export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === KEY_CODES.ENTER) {
       handleSearch();
     }
   };
@@ -36,15 +39,15 @@ export function Search({ searchTerm, setSearchTerm, onSearch }: SearchProps) {
         value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder="Search..."
+        placeholder={PLACEHOLDER}
         className="w-full p-2 border rounded"
       />
       <button
         onClick={handleSearch}
-        className="cursor-pointer btn-app"
+        className="cursor-pointer dark:text-[var(--color-black)] px-4 py-2 bg-[var(--color-gray-300)] rounded hover:bg-[var(--color-gray-400)] hover:text-[var(--color-white)] transition-all duration-300"
         type="button"
       >
-        Search
+        {SEARCH_BUTTON}
       </button>
     </div>
   );

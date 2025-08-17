@@ -9,7 +9,6 @@ export function ThemeSwitcher() {
   return (
     <button
       aria-label="Toggle theme"
-      title="Change color theme"
       className="rounded-lg p-2 transition-colors cursor-pointer"
       onClick={toggleTheme}
       type="button"
