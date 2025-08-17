@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { DEFAULT_SVG_COLOR } from '../../data/app-data';
 
 type SvgProps = React.SVGProps<SVGSVGElement> & {
@@ -12,5 +14,13 @@ export function SvgWrapper({
   label,
   ...props
 }: SvgProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return <Icon {...props} fill={color} role="img" aria-label={label} />;
 }

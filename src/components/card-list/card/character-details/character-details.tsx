@@ -34,7 +34,7 @@ export default function CharacterDetails({
 
   return (
     <div>
-      <div className="relative mb-4 w-35 h-35 md:w-70 md:h-70 rounded-full object-cover border border-[var(--color-gray-300)]">
+      <div className="relative mb-4 w-35 h-35 md:w-70 md:h-70 rounded-full object-cover border border-[var(--color-gray-300)] overflow-hidden">
         <Image
           src={character.image}
           alt={character.name}

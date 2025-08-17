@@ -71,8 +71,8 @@ export function Card(props: CardProps) {
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <div className="relative w-20 h-20 rounded-full object-cover border border-[var(--color-gray-300)]">
+        <div className="flex flex-col  gap-4 sm:flex-row">
+          <div className="relative w-20 h-20 rounded-full object-cover border border-[var(--color-gray-300)] overflow-hidden">
             <Image
               src={image}
               alt={name}

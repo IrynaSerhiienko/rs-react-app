@@ -31,14 +31,7 @@ class ErrorBoundary extends Component<
   render() {
     const { hasError, throwError } = this.state;
 
-    const errorButton = (
-      <button
-        onClick={this.handleThrow}
-        className="absolute bottom-4 right-30 p-2 dark:text-[var(--color-black)] px-4 py-2 bg-[var(--color-gray-300)] rounded hover:bg-[var(--color-gray-400)] hover:text-[var(--color-white)] transition-all duration-300 cursor-pointer"
-      >
-        Error Button
-      </button>
-    );
+    const errorButton = null;
 
     const retryButton = (
       <button

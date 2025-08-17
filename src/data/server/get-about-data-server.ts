@@ -1,7 +1,7 @@
 import { ABOUT_KEYS } from '../app-data';
 import { TranslationKey, tServer } from './translations-server';
 
-export function useAboutDataServer(locale: string) {
+export async function getAboutDataServer(locale: string) {
   const t = (key: (typeof ABOUT_KEYS)[keyof typeof ABOUT_KEYS]) =>
     tServer(key as TranslationKey, locale);
 
