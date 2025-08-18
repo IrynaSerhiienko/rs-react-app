@@ -1,7 +1,9 @@
-import type { Character } from '../types/types';
+'use server';
 
-export function createCSVBlob(items: Character[]): Blob | null {
-  if (!items.length) return null;
+import { Character } from '../types/types';
+
+export async function generateCSV(items: Character[]): Promise<string> {
+  if (!items.length) return '';
 
   const headers = Object.keys(items[0]) as (keyof Character)[];
   const rows = items.map((item) =>
@@ -13,7 +15,5 @@ export function createCSVBlob(items: Character[]): Blob | null {
   const csvContent = [headers.join(';'), ...rows].join('\r\n');
   const bom = '\uFEFF';
 
-  return new Blob([bom + csvContent], {
-    type: 'text/csv;charset=utf-8;',
-  });
+  return bom + csvContent;
 }

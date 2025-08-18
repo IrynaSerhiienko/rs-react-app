@@ -1,9 +1,9 @@
+'use client';
 import { useRef } from 'react';
 
 import { useFlyoutData } from '../../data/app-data';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { unselectAll } from '../../store/selected-items-slice';
-import { createCSVBlob } from '../../utils/download-csv';
 import { LimitContainer } from '../container/container';
 
 export function Flyout() {
@@ -27,16 +27,28 @@ export function Flyout() {
     dispatch(unselectAll());
   };
 
-  const handleDownload = () => {
-    const blob = createCSVBlob(selectedItems);
-    if (!blob) return;
+  const handleDownload = async () => {
+    try {
+      const res = await fetch('/api/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedItems),
+      });
 
-    const url = URL.createObjectURL(blob);
-    if (downloadRef.current) {
-      downloadRef.current.href = url;
-      downloadRef.current.download = `${selectedItems.length}_items.csv`;
-      downloadRef.current.click();
+      if (!res.ok) throw new Error('Failed to download CSV');
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
+      if (downloadRef.current) {
+        downloadRef.current.href = url;
+        downloadRef.current.download = `${selectedItems.length}_items.csv`;
+        downloadRef.current.click();
+      }
+
       URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('CSV download error:', error);
     }
   };
 
