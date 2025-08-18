@@ -17,9 +17,13 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const root = window.document.documentElement;
-    return theme === THEMES.DARK
-      ? root.classList.add(THEMES.LIGHT)
-      : root.classList.remove(THEMES.DARK);
+    if (theme === THEMES.DARK) {
+      root.classList.add(THEMES.DARK);
+      root.classList.remove(THEMES.LIGHT);
+    } else {
+      root.classList.add(THEMES.LIGHT);
+      root.classList.remove(THEMES.DARK);
+    }
   }, [theme]);
 
   const toggleTheme = () => {

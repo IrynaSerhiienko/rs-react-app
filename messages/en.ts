@@ -74,4 +74,8 @@ export const MESSAGES_EN = {
     PLACEHOLDER: 'Search...',
     SEARCH_BUTTON: 'Search',
   },
+  PAGINATION: {
+    PREV_BUTTON: 'Prev',
+    NEXT_BUTTON: 'Next',
+  },
 };

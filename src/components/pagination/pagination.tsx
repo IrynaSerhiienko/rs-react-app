@@ -1,3 +1,6 @@
+'use client';
+import { usePaginationData } from '../../data/app-data';
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -9,6 +12,8 @@ export function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
+  const { PREV_BUTTON, NEXT_BUTTON, PAGE_LABEL } = usePaginationData();
+
   const handlePrev = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
@@ -30,7 +35,7 @@ export function Pagination({
           currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
         }`}
       >
-        Prev
+        {PREV_BUTTON}
       </button>
 
       <span className="px-4 py-2">
@@ -46,7 +51,7 @@ export function Pagination({
             : 'cursor-pointer'
         }`}
       >
-        Next
+        {NEXT_BUTTON}
       </button>
     </nav>
   );

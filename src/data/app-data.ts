@@ -88,6 +88,11 @@ export const HEADER_KEYS = {
   LOGO_ALT: 'HEADER.ICONS.LOGO.ALT',
 } as const;
 
+export const PAGINATION_KEYS = {
+  PREV_BUTTON: 'PAGINATION.PREV_BUTTON',
+  NEXT_BUTTON: 'PAGINATION.NEXT_BUTTON',
+} as const;
+
 export const ALL_KEYS = {
   ...CARD_KEYS,
   ...CARD_DETAILS_KEYS,
@@ -99,6 +104,7 @@ export const ALL_KEYS = {
   ...ABOUT_KEYS,
   ...HOME_KEYS,
   ...HEADER_KEYS,
+  ...PAGINATION_KEYS,
 } as const;
 
 export interface AboutData {
@@ -250,6 +256,15 @@ export const useCharacterData = () => {
   };
 
   return { CARD_DETAILS };
+};
+
+export const usePaginationData = () => {
+  const t = useTranslations();
+
+  return {
+    PREV_BUTTON: t(PAGINATION_KEYS.PREV_BUTTON),
+    NEXT_BUTTON: t(PAGINATION_KEYS.NEXT_BUTTON),
+  };
 };
 
 export const CHARACTERS_API = {

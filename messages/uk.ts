@@ -74,4 +74,8 @@ export const MESSAGES_UK = {
     PLACEHOLDER: 'Пошук...',
     SEARCH_BUTTON: 'Пошук',
   },
+  PAGINATION: {
+    PREV_BUTTON: 'Попередня',
+    NEXT_BUTTON: 'Наступна',
+  },
 };

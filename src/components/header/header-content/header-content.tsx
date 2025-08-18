@@ -8,6 +8,7 @@ import { COLORS, NAVIGATION, THEMES } from '../../../data/app-data';
 import { useHeaderData, useNavigationData } from '../../../data/app-data';
 import { useTheme } from '../../../hooks/use-theme';
 import { LimitContainer } from '../../container/container';
+import { LanguageSwitcher } from '../../language-switcher/language-switcher';
 import { SvgWrapper } from '../../svg-wrapper/svg-wrapper';
 import { ThemeSwitcher } from '../../theme-switcher/theme-switcher';
 
@@ -45,7 +46,6 @@ export function HeaderContent() {
         </Link>
         <div className="flex gap-8 justify-end basis-[70%]">
           {NAV_ITEMS.map(({ to, label }) => {
-            console.log('link:', label, 'to:', to, 'pathname:', pathname);
             return (
               <Link key={to} href={to} className={getLinkClass(to)}>
                 {label}
@@ -55,6 +55,7 @@ export function HeaderContent() {
         </div>
         <div className="flex justify-end basis-[10%]">
           <ThemeSwitcher />
+          <LanguageSwitcher />
         </div>
       </LimitContainer>
     </header>
