@@ -78,4 +78,9 @@ export const MESSAGES_UK = {
     PREV_BUTTON: 'Попередня',
     NEXT_BUTTON: 'Наступна',
   },
+  NOT_FOUND_PAGE: {
+    TITLE: '404 - Сторінку не знайдено',
+    DESCRIPTION: 'Сторінка, яку ви шукаєте, не існує.',
+    HOME_BUTTON: 'Повернутися на головну зараз',
+  },
 };

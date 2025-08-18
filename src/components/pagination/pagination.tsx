@@ -12,7 +12,7 @@ export function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
-  const { PREV_BUTTON, NEXT_BUTTON, PAGE_LABEL } = usePaginationData();
+  const { PREV_BUTTON, NEXT_BUTTON } = usePaginationData();
 
   const handlePrev = () => {
     if (currentPage > 1) {

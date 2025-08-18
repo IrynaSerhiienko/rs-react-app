@@ -78,4 +78,9 @@ export const MESSAGES_EN = {
     PREV_BUTTON: 'Prev',
     NEXT_BUTTON: 'Next',
   },
+  NOT_FOUND_PAGE: {
+    TITLE: '404 - Page not found',
+    DESCRIPTION: 'The page you are looking for does not exist.',
+    HOME_BUTTON: 'Return to Home Page now',
+  },
 };

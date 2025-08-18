@@ -93,6 +93,12 @@ export const PAGINATION_KEYS = {
   NEXT_BUTTON: 'PAGINATION.NEXT_BUTTON',
 } as const;
 
+export const NOT_FOUND_KEYS = {
+  TITLE: 'NOT_FOUND_PAGE.TITLE',
+  DESCRIPTION: 'NOT_FOUND_PAGE.DESCRIPTION',
+  HOME_BUTTON: 'NOT_FOUND_PAGE.HOME_BUTTON',
+} as const;
+
 export const ALL_KEYS = {
   ...CARD_KEYS,
   ...CARD_DETAILS_KEYS,
@@ -105,6 +111,7 @@ export const ALL_KEYS = {
   ...HOME_KEYS,
   ...HEADER_KEYS,
   ...PAGINATION_KEYS,
+  ...NOT_FOUND_KEYS,
 } as const;
 
 export interface AboutData {
@@ -264,6 +271,16 @@ export const usePaginationData = () => {
   return {
     PREV_BUTTON: t(PAGINATION_KEYS.PREV_BUTTON),
     NEXT_BUTTON: t(PAGINATION_KEYS.NEXT_BUTTON),
+  };
+};
+
+export const useNotFoundData = () => {
+  const t = useTranslations();
+
+  return {
+    TITLE: t(NOT_FOUND_KEYS.TITLE),
+    DESCRIPTION: t(NOT_FOUND_KEYS.DESCRIPTION),
+    HOME_BUTTON: t(NOT_FOUND_KEYS.HOME_BUTTON),
   };
 };
 
