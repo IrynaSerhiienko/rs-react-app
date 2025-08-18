@@ -27,6 +27,7 @@ export function AboutPageContent({ about }: AboutPageContentProps) {
             alt={about.AUTHOR.ALT}
             fill
             style={{ objectFit: 'contain' }}
+            sizes="120px"
           />
         </div>
         <div>

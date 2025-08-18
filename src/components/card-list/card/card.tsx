@@ -78,6 +78,7 @@ export function Card(props: CardProps) {
               alt={name}
               fill
               style={{ objectFit: 'contain' }}
+              sizes="80px"
             />
           </div>
           <div>
