@@ -1,3 +1,5 @@
+'use client';
+
 import { type ReactNode, useEffect } from 'react';
 
 import { THEMES } from '../data/app-data';
@@ -8,16 +10,20 @@ import { ThemeContext } from './theme-context';
 const LOCAL_STORAGE_KEY = 'SIA_RS_React-app-theme';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const { value: theme, setValue: setTheme } = useLocalStorage(
+  const { value: theme, setValue: setTheme } = useLocalStorage<Theme>(
     LOCAL_STORAGE_KEY,
     THEMES.LIGHT
   );
 
   useEffect(() => {
     const root = window.document.documentElement;
-    return theme === THEMES.DARK
-      ? root.classList.add('dark')
-      : root.classList.remove('dark');
+    if (theme === THEMES.DARK) {
+      root.classList.add(THEMES.DARK);
+      root.classList.remove(THEMES.LIGHT);
+    } else {
+      root.classList.add(THEMES.LIGHT);
+      root.classList.remove(THEMES.DARK);
+    }
   }, [theme]);
 
   const toggleTheme = () => {

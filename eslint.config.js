@@ -11,7 +11,7 @@ import tseslint from 'typescript-eslint';
 import unusedImports from 'eslint-plugin-unused-imports';
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage', '**/vite-env.d.ts'] },
+  { ignores: ['dist', 'coverage', '**/next-env.d.ts'] },
   {
     extends: [
       js.configs.recommended,

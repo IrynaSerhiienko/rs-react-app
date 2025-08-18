@@ -1,3 +1,6 @@
+'use client';
+import { usePaginationData } from '../../data/app-data';
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -9,6 +12,8 @@ export function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
+  const { PREV_BUTTON, NEXT_BUTTON } = usePaginationData();
+
   const handlePrev = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
@@ -26,11 +31,11 @@ export function Pagination({
       <button
         disabled={currentPage === 1}
         onClick={handlePrev}
-        className={`btn-app ${
+        className={`dark:text-[var(--color-black)] px-4 py-2 bg-[var(--color-gray-300)] rounded hover:bg-[var(--color-gray-400)] hover:text-[var(--color-white)] transition-all duration-300 ${
           currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
         }`}
       >
-        Prev
+        {PREV_BUTTON}
       </button>
 
       <span className="px-4 py-2">
@@ -40,13 +45,13 @@ export function Pagination({
       <button
         disabled={currentPage === totalPages}
         onClick={handleNext}
-        className={`btn-app ${
+        className={`dark:text-[var(--color-black)] px-4 py-2 bg-[var(--color-gray-300)] rounded hover:bg-[var(--color-gray-400)] hover:text-[var(--color-white)] transition-all duration-300 ${
           currentPage === totalPages
             ? 'cursor-not-allowed opacity-50'
             : 'cursor-pointer'
         }`}
       >
-        Next
+        {NEXT_BUTTON}
       </button>
     </nav>
   );
