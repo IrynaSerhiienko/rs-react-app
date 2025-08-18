@@ -5,9 +5,10 @@ import { getAboutDataServer } from '../../../data/server/get-about-data-server';
 export default async function AboutPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const aboutData = await getAboutDataServer(params.locale);
+  const { locale } = await params;
+  const aboutData = await getAboutDataServer(locale);
 
   return (
     <ClientProviders>

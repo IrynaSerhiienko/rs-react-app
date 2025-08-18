@@ -41,6 +41,7 @@ export default function CharacterDetails({
           fill
           style={{ objectFit: 'contain' }}
           sizes="(max-width: 768px) 140px, 280px"
+          priority
         />
       </div>
       <h2 className="mb-4 text-xl md:text-2xl font-semibold">

@@ -8,12 +8,15 @@ export default async function HomePage({
   params,
   searchParams,
 }: {
-  params: { locale: string };
-  searchParams?: { page?: string; name?: string };
+  params: Promise<{ locale: string }>;
+  searchParams?: Promise<{ page?: string; name?: string }>;
 }) {
-  const page = Number(searchParams?.page || CHARACTERS_API.DEFAULT_PAGE);
-  const searchTerm = searchParams?.name || CHARACTERS_API.DEFAULT_NAME;
-  const homeData = await getHomeDataServer(params.locale);
+  const { locale } = await params;
+  const { page: newPage, name } = (await searchParams) || {};
+
+  const page = Number(newPage || CHARACTERS_API.DEFAULT_PAGE);
+  const searchTerm = name || CHARACTERS_API.DEFAULT_NAME;
+  const homeData = await getHomeDataServer(locale);
 
   const serverData = await getCharactersDataServer({ name: searchTerm, page });
 
