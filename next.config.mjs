@@ -4,7 +4,14 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const nextConfig = {
   distDir: './dist',
   images: {
-    domains: ['rickandmortyapi.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'rickandmortyapi.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
   webpack(config) {
     config.module.rules.push({

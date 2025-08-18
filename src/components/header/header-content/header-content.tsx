@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import Logo from '../../../assets/logo.svg';
 import { COLORS, NAVIGATION, THEMES } from '../../../data/app-data';
 import { useHeaderData, useNavigationData } from '../../../data/app-data';
 import { useTheme } from '../../../hooks/use-theme';
+import { Link } from '../../../i18n/navigation';
 import { LimitContainer } from '../../container/container';
 import { LanguageSwitcher } from '../../language-switcher/language-switcher';
 import { SvgWrapper } from '../../svg-wrapper/svg-wrapper';
